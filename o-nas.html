@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="sl" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VAREX | O nas - Premium kovinarstvo v Ljubljani</title>
+  <meta name="description" content="Spoznajte podjetje VAREX — specializirano za vrhunsko oblikovanje ter izdelavo kovinskih nadstreškov, pergol in ograj po meri v Ljubljani in okolici." />
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  
+  <!-- Fontshare Clash Display & Google Fonts (Manrope, Inter) -->
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700,800&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            varex: {
+              black: '#07080A',
+              dark: '#0B0C10',
+              surface: '#12141C',
+              card: '#181B26',
+              orange: '#FF5E00',
+              orangeHover: '#FF7722',
+              amber: '#FFAA00'
+            }
+          },
+          fontFamily: {
+            clash: ['Clash Display', 'sans-serif'],
+            sans: ['Manrope', 'Inter', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide & Canvas Confetti -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.4/dist/confetti.browser.min.js"></script>
+
+  <style>
+    :root {
+      --bg-dark: #07080A;
+      --accent-orange: #FF5E00;
+      --accent-amber: #FFAA00;
+      --font-heading: 'Clash Display', sans-serif;
+      --font-body: 'Manrope', 'Inter', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: #F8FAFC;
+      font-family: var(--font-body);
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4, .font-heading {
+      font-family: var(--font-heading);
+      letter-spacing: -0.02em;
+    }
+
+    /* -------------------------------------------------------------
+       SCROLL REVEAL (FADE IN & FADE OUT)
+    ------------------------------------------------------------- */
+    .reveal-item {
+      opacity: 0;
+      transform: translateY(40px) scale(0.98);
+      transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform;
+    }
+
+    .reveal-item.is-visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .reveal-item.is-exited {
+      opacity: 0.15;
+      transform: translateY(-20px) scale(0.97);
+    }
+
+    /* -------------------------------------------------------------
+       PAGE TRANSITION FADE SYSTEM
+    ------------------------------------------------------------- */
+    .page-wrapper {
+      transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .page-fade-out {
+      opacity: 0 !important;
+    }
+
+    /* -------------------------------------------------------------
+       PROFESSIONAL WHITE LOGO BADGE CONTAINER
+    ------------------------------------------------------------- */
+    .logo-badge {
+      background-color: #FFFFFF;
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+      border-radius: 0.85rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.35rem 0.65rem;
+    }
+
+    .btn-orange-glow {
+      background: linear-gradient(135deg, #FF5E00 0%, #E04B00 100%);
+      color: #ffffff;
+      box-shadow: 0 0 25px rgba(255, 94, 0, 0.4);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .btn-orange-glow:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 0 40px rgba(255, 94, 0, 0.7);
+      background: linear-gradient(135deg, #FF7722 0%, #FF5E00 100%);
+    }
+
+    .asymmetric-badge {
+      background: rgba(255, 94, 0, 0.12);
+      border: 1px solid rgba(255, 94, 0, 0.3);
+      backdrop-filter: blur(12px);
+    }
+
+    .gradient-clash {
+      background: linear-gradient(135deg, #FFFFFF 20%, #FF5E00 70%, #FFAA00 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* -------------------------------------------------------------
+       REACTIVE AMBIENT ORANGE BACKGROUND (WELDING / MOLTEN METAL)
+    ------------------------------------------------------------- */
+    #ambient-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    /* Floating molten orbs */
+    .ambient-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 1;
+      animation: orbFloat linear infinite;
+    }
+
+    .ambient-orb--1 {
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(255,94,0,0.35) 0%, rgba(255,140,0,0.15) 50%, transparent 70%);
+      top: -10%; left: -5%;
+      animation-duration: 18s;
+      animation-delay: 0s;
+    }
+    .ambient-orb--2 {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(255,170,0,0.25) 0%, rgba(255,94,0,0.1) 50%, transparent 70%);
+      bottom: 10%; right: -8%;
+      animation-duration: 22s;
+      animation-delay: 3s;
+    }
+    .ambient-orb--3 {
+      width: 450px; height: 450px;
+      background: radial-gradient(circle, rgba(255,94,0,0.25) 0%, rgba(200,60,0,0.1) 50%, transparent 70%);
+      top: 40%; left: 50%;
+      animation-duration: 25s;
+      animation-delay: 6s;
+    }
+
+    @keyframes orbFloat {
+      0%   { opacity: 0;   transform: translate(0, 0)      scale(0.8); }
+      15%  { opacity: 1; }
+      50%  { opacity: 0.7; transform: translate(60px, -40px) scale(1.15); }
+      85%  { opacity: 1; }
+      100% { opacity: 0;   transform: translate(-30px, 30px) scale(0.9); }
+    }
+
+    /* Mouse-reactive glow (set via JS) */
+    #mouse-glow {
+      position: fixed;
+      width: 800px; height: 800px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,94,0,0.25) 0%, rgba(255,140,0,0.1) 40%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+      transform: translate(-50%, -50%);
+      transition: left 0.4s ease-out, top 0.4s ease-out, opacity 0.6s ease;
+      opacity: 0;
+      filter: blur(30px);
+    }
+
+    /* Welding spark canvas overlay */
+    #spark-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* Ensure page content sits above the ambient layer */
+    #page-wrapper {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* -------------------------------------------------------------
+       ABOUT PAGE SPECIFIC STYLES
+    ------------------------------------------------------------- */
+    .timeline-line {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, transparent, #FF5E00 20%, #FF5E00 80%, transparent);
+      transform: translateX(-50%);
+    }
+
+    .value-card {
+      background: #12141C;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 1.5rem;
+      padding: 2rem;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .value-card:hover {
+      border-color: rgba(255, 94, 0, 0.4);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 50px rgba(255, 94, 0, 0.08);
+    }
+
+    .stat-number {
+      background: linear-gradient(135deg, #FF5E00 0%, #FFAA00 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  </style>
+</head>
+<body class="bg-[#07080A] text-slate-100 antialiased selection:bg-[#FF5E00] selection:text-white">
+
+  <!-- =========================================================
+       0. REACTIVE AMBIENT BACKGROUND (WELDING GLOW)
+  ========================================================= -->
+  <div id="ambient-bg">
+    <div class="ambient-orb ambient-orb--1"></div>
+    <div class="ambient-orb ambient-orb--2"></div>
+    <div class="ambient-orb ambient-orb--3"></div>
+  </div>
+  <div id="mouse-glow"></div>
+  <canvas id="spark-canvas"></canvas>
+
+  <!-- =========================================================
+       1. MAIN PAGE WRAPPER
+  ========================================================= -->
+  <div id="page-wrapper" class="page-wrapper opacity-100">
+
+    <!-- Top Announcement Bar -->
+    <div class="bg-[#0B0C10] border-b border-white/5 py-2 px-4 text-xs font-medium text-slate-300">
+      <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-2">
+        <div class="flex items-center gap-4 text-slate-400">
+          <span class="flex items-center gap-1.5">
+            <i data-lucide="map-pin" class="w-3.5 h-3.5 text-[#FF5E00]"></i>
+            Ljubljana &amp; širša okolica (30km+ radij)
+          </span>
+          <span class="hidden sm:inline-flex items-center gap-1.5 text-emerald-400 font-semibold">
+            <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
+            100% Natančna izvedba &amp; Atestirano Varjenje
+          </span>
+        </div>
+        <div class="flex items-center gap-4 ml-auto">
+          <a href="mailto:info@varex.si" class="flex items-center gap-1.5 hover:text-[#FF5E00] transition-colors">
+            <i data-lucide="mail" class="w-3.5 h-3.5 text-[#FF5E00]"></i>
+            info@varex.si
+          </a>
+          <a href="tel:+38640123456" class="flex items-center gap-1.5 font-bold text-white hover:text-[#FF5E00] transition-colors bg-[#FF5E00]/10 px-3 py-1 rounded-lg border border-[#FF5E00]/30">
+            <i data-lucide="phone" class="w-3.5 h-3.5 text-[#FF5E00]"></i>
+            040 123 456
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Header / Navbar -->
+    <header class="sticky top-0 z-40 bg-[#07080A]/95 backdrop-blur-xl border-b border-slate-800/80">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between">
+        
+        <!-- Logo -->
+        <a href="/" class="flex items-center gap-3.5 group">
+          <div class="logo-badge group-hover:scale-105 transition-transform">
+            <img src="/favicon.png" alt="VAREX Icon" class="h-9 w-auto object-contain" />
+          </div>
+          <div class="flex flex-col">
+            <span class="font-heading font-black text-2xl tracking-wider text-white">VAREX</span>
+            <span class="text-[9px] text-slate-400 uppercase tracking-[0.2em] -mt-1 font-bold">Kovinarstvo po Meri</span>
+          </div>
+        </a>
+
+        <!-- Desktop Links -->
+        <nav class="hidden md:flex items-center gap-8 font-semibold text-xs tracking-wider uppercase text-slate-300">
+          <a href="/" class="hover:text-[#FF5E00] transition-colors">Začetna</a>
+          <a href="/#storitve" class="hover:text-[#FF5E00] transition-colors">Storitve</a>
+          <a href="/o-nas.html" class="text-[#FF5E00] transition-colors">O Nas</a>
+          <a href="/#reference" class="hover:text-[#FF5E00] transition-colors">Reference</a>
+          <a href="/faq.html" class="hover:text-[#FF5E00] transition-colors">FAQ</a>
+          <a href="/#kontakt" class="hover:text-[#FF5E00] transition-colors">Kontakt</a>
+        </nav>
+
+        <div class="hidden lg:flex items-center gap-4">
+          <button onclick="openModal('quote-modal')" class="btn-orange-glow font-heading font-extrabold text-xs tracking-wider uppercase px-6 py-3 rounded-xl flex items-center gap-2">
+            <span>Brezplačno Povpraševanje</span>
+          </button>
+        </div>
+
+        <button onclick="toggleMobileMenu()" class="md:hidden p-2 text-slate-300">
+          <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+      </div>
+
+      <!-- Mobile Menu Drawer -->
+      <div id="mobile-drawer" class="hidden md:hidden bg-[#0B0C10] border-b border-slate-800 px-6 py-6 space-y-4 text-center">
+        <a href="/" class="block py-2 font-bold text-slate-200 hover:text-[#FF5E00]">Začetna</a>
+        <a href="/#storitve" class="block py-2 font-bold text-slate-200 hover:text-[#FF5E00]">Storitve</a>
+        <a href="/o-nas.html" class="block py-2 font-bold text-[#FF5E00]">O Nas</a>
+        <a href="/#reference" class="block py-2 font-bold text-slate-200 hover:text-[#FF5E00]">Reference</a>
+        <a href="/faq.html" class="block py-2 font-bold text-slate-200 hover:text-[#FF5E00]">FAQ</a>
+        <a href="/#kontakt" class="block py-2 font-bold text-slate-200 hover:text-[#FF5E00]">Kontakt</a>
+        <button onclick="toggleMobileMenu(); openModal('quote-modal')" class="w-full btn-orange-glow font-heading font-extrabold py-3.5 rounded-xl uppercase tracking-wider text-xs">
+          Brezplačno Povpraševanje
+        </button>
+      </div>
+    </header>
+
+    <!-- =========================================================
+         HERO BANNER — O NAS
+    ========================================================= -->
+    <section class="relative py-24 sm:py-32 bg-transparent overflow-hidden">
+      <!-- Background Glows -->
+      <div class="absolute -top-32 -left-32 w-[650px] h-[650px] bg-[#FF5E00]/12 rounded-full blur-[150px] pointer-events-none"></div>
+      <div class="absolute bottom-10 -right-20 w-[400px] h-[400px] bg-[#FFAA00]/8 rounded-full blur-[130px] pointer-events-none"></div>
+
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="max-w-3xl mx-auto text-center space-y-6 reveal-item">
+          
+          <!-- Breadcrumb -->
+          <nav class="flex justify-center items-center gap-2 text-xs text-slate-400 font-medium mb-4">
+            <a href="/" class="hover:text-[#FF5E00] transition-colors">Začetna</a>
+            <i data-lucide="chevron-right" class="w-3 h-3"></i>
+            <span class="text-[#FF5E00] font-bold">O nas</span>
+          </nav>
+
+          <div class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full asymmetric-badge text-[#FF5E00] text-xs font-extrabold uppercase tracking-widest">
+            <i data-lucide="building-2" class="w-4 h-4 text-[#FFAA00]"></i>
+            <span>O podjetju VAREX</span>
+          </div>
+
+          <h1 class="font-heading font-black text-4xl sm:text-5xl lg:text-6xl leading-[1.08] tracking-tight text-white">
+            Natančnost, hitrost in <span class="gradient-clash">brezkompromisna izvedba</span>
+          </h1>
+
+          <p class="text-base sm:text-lg text-slate-300 max-w-2xl mx-auto font-normal leading-relaxed">
+            Podjetje <strong class="text-white">VAREX</strong> je specializirano za vrhunsko oblikovanje ter izdelavo kovinskih nadstreškov, pergol in ograj po meri. Vse konstrukcije izdelujemo v naši delavnici z najsodobnejšo tehnologijo varjenja ter antikorozijske zaščite.
+          </p>
+
+          <div class="flex flex-wrap justify-center gap-4 pt-4">
+            <button onclick="openModal('quote-modal')" class="btn-orange-glow font-heading font-extrabold text-sm uppercase tracking-wider px-8 py-4 rounded-xl flex items-center gap-3">
+              <span>Pridobite ponudbo</span>
+              <i data-lucide="arrow-right" class="w-5 h-5"></i>
+            </button>
+            <a href="tel:+38640123456" class="bg-white/5 hover:bg-[#FF5E00]/15 text-white border border-white/15 px-6 py-4 rounded-xl font-bold text-sm flex items-center gap-3 transition-all">
+              <i data-lucide="phone" class="w-5 h-5 text-[#FF5E00]"></i>
+              <span>Pokličite: 040 123 456</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         WHO WE ARE — DETAILED SECTION
+    ========================================================= -->
+    <section class="py-24 bg-[#0B0C10]/40 border-t border-slate-800">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid lg:grid-cols-12 gap-12 items-center">
+
+          <!-- Image Column -->
+          <div class="lg:col-span-5 reveal-item">
+            <div class="relative rounded-3xl overflow-hidden border border-[#FF5E00]/30 shadow-2xl">
+              <img src="/welding_spark_craft.jpg" alt="VAREX Delavnica" class="w-full h-[460px] object-cover" />
+              <div class="absolute inset-0 bg-gradient-to-t from-[#07080A] via-transparent to-transparent opacity-60"></div>
+              <div class="absolute bottom-4 left-4 right-4 p-5 bg-[#12141C]/90 backdrop-blur-md rounded-2xl border border-white/10">
+                <div class="font-heading text-sm font-bold text-white flex items-center gap-2">
+                  <i data-lucide="award" class="text-[#FF5E00]"></i> VAREX garancija kakovosti
+                </div>
+                <div class="text-xs text-slate-300 mt-1">Uporabljamo certificirano jeklo ter TIG/MIG varilne ateste.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Text Column -->
+          <div class="lg:col-span-7 space-y-8 reveal-item">
+            <span class="px-4 py-1.5 rounded-full bg-[#FF5E00]/15 text-[#FF5E00] border border-[#FF5E00]/30 text-xs font-extrabold uppercase tracking-widest">Naša zgodba</span>
+            <h2 class="font-heading text-3xl sm:text-4xl font-extrabold text-white">Zakaj izbrati VAREX za vaš kovinski projekt?</h2>
+            <p class="text-slate-300 text-sm leading-relaxed">
+              Pri podjetju <strong class="text-white">VAREX</strong> verjamemo, da je vsak projekt edinstvena priložnost za izjemno obrtniško delo. Naša ekipa izkušenih varilcev in oblikovalcev se posveča vsaki detajli — od začetne meritve na terenu do končne montaže pri vas doma.
+            </p>
+            <p class="text-slate-300 text-sm leading-relaxed">
+              Naša delavnica je opremljena z najsodobnejšo varilsko opremo, plazemskim razrezom ter pečjo za prašno barvanje. To nam omogoča celovit nadzor nad kakovostjo — od surovega jekla do končnega izdelka.
+            </p>
+
+            <!-- Feature Cards -->
+            <div class="grid sm:grid-cols-2 gap-4 pt-2">
+              <div class="value-card space-y-3">
+                <div class="w-12 h-12 rounded-2xl bg-[#FF5E00]/10 flex items-center justify-center">
+                  <i data-lucide="ruler" class="w-6 h-6 text-[#FF5E00]"></i>
+                </div>
+                <div class="font-heading font-extrabold text-white text-base">100% terenska izmera</div>
+                <div class="text-xs text-slate-400 leading-relaxed">Pridemo na vaš dom v Ljubljani z okolico ter natančno izmerimo teren.</div>
+              </div>
+              <div class="value-card space-y-3">
+                <div class="w-12 h-12 rounded-2xl bg-[#FF5E00]/10 flex items-center justify-center">
+                  <i data-lucide="shield-check" class="w-6 h-6 text-[#FF5E00]"></i>
+                </div>
+                <div class="font-heading font-extrabold text-white text-base">Vroče cinkanje &amp; lakiranje</div>
+                <div class="text-xs text-slate-400 leading-relaxed">Dvojna zaščita pred korozijo zagotavlja trajno odpornost na rjo.</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         STATS / KEY NUMBERS
+    ========================================================= -->
+    <section class="py-20 bg-transparent">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 reveal-item">
+          
+          <div class="text-center space-y-2 p-6 rounded-2xl bg-[#12141C] border border-slate-800/60">
+            <div class="font-heading font-black text-4xl sm:text-5xl stat-number">100%</div>
+            <div class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Spoštovanje rokov</div>
+          </div>
+
+          <div class="text-center space-y-2 p-6 rounded-2xl bg-[#12141C] border border-slate-800/60">
+            <div class="font-heading font-black text-4xl sm:text-5xl stat-number">30+</div>
+            <div class="text-xs text-slate-400 font-semibold uppercase tracking-wider">km pokritost</div>
+          </div>
+
+          <div class="text-center space-y-2 p-6 rounded-2xl bg-[#12141C] border border-slate-800/60">
+            <div class="font-heading font-black text-4xl sm:text-5xl stat-number">TIG</div>
+            <div class="text-xs text-slate-400 font-semibold uppercase tracking-wider">&amp; MIG varjenje</div>
+          </div>
+
+          <div class="text-center space-y-2 p-6 rounded-2xl bg-[#12141C] border border-slate-800/60">
+            <div class="font-heading font-black text-4xl sm:text-5xl stat-number">10+</div>
+            <div class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Let garancije</div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         OUR VALUES / PROCESS
+    ========================================================= -->
+    <section class="py-24 bg-[#0B0C10]/40 border-t border-slate-800">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+
+        <div class="text-center max-w-3xl mx-auto space-y-4 reveal-item">
+          <span class="px-4 py-1.5 rounded-full bg-[#FF5E00]/15 text-[#FF5E00] border border-[#FF5E00]/30 text-xs font-extrabold uppercase tracking-widest">Naš postopek</span>
+          <h2 class="font-heading text-3xl sm:text-4xl font-extrabold text-white">Od ideje do končnega izdelka</h2>
+          <p class="text-slate-400 text-base">Vsak projekt izvedemo v 4 jasnih korakih — brez skritih stroškov ali neprijetnih presenečenj.</p>
+        </div>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+          <!-- Step 1 -->
+          <div class="value-card space-y-4 reveal-item relative">
+            <div class="flex items-center justify-between">
+              <div class="w-12 h-12 rounded-2xl bg-[#FF5E00]/15 flex items-center justify-center font-heading font-black text-[#FF5E00] text-lg">01</div>
+              <i data-lucide="message-square" class="w-5 h-5 text-slate-600"></i>
+            </div>
+            <h3 class="font-heading font-extrabold text-white text-lg">Povpraševanje</h3>
+            <p class="text-xs text-slate-400 leading-relaxed">Oddajte povpraševanje prek obrazca ali nas pokličite. Odgovorimo v 24 urah z okvirno ponudbo.</p>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="value-card space-y-4 reveal-item relative">
+            <div class="flex items-center justify-between">
+              <div class="w-12 h-12 rounded-2xl bg-[#FF5E00]/15 flex items-center justify-center font-heading font-black text-[#FF5E00] text-lg">02</div>
+              <i data-lucide="ruler" class="w-5 h-5 text-slate-600"></i>
+            </div>
+            <h3 class="font-heading font-extrabold text-white text-lg">Terenska izmera</h3>
+            <p class="text-xs text-slate-400 leading-relaxed">Naš inženir pride na vaš dom, opravi natančno izmero ter skupaj z vami potrdi dimenzije in dizajn.</p>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="value-card space-y-4 reveal-item relative">
+            <div class="flex items-center justify-between">
+              <div class="w-12 h-12 rounded-2xl bg-[#FF5E00]/15 flex items-center justify-center font-heading font-black text-[#FF5E00] text-lg">03</div>
+              <i data-lucide="hammer" class="w-5 h-5 text-slate-600"></i>
+            </div>
+            <h3 class="font-heading font-extrabold text-white text-lg">Izdelava v delavnici</h3>
+            <p class="text-xs text-slate-400 leading-relaxed">Konstrukcijo izdelamo s TIG/MIG varjenjem, vroče cinkamo ter prašno barvamo v izbrani RAL odtenek.</p>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="value-card space-y-4 reveal-item relative">
+            <div class="flex items-center justify-between">
+              <div class="w-12 h-12 rounded-2xl bg-[#FF5E00]/15 flex items-center justify-center font-heading font-black text-[#FF5E00] text-lg">04</div>
+              <i data-lucide="check-circle" class="w-5 h-5 text-slate-600"></i>
+            </div>
+            <h3 class="font-heading font-extrabold text-white text-lg">Montaža in predaja</h3>
+            <p class="text-xs text-slate-400 leading-relaxed">Profesionalna montaža na lokaciji z garancijo kakovosti. Vaš projekt je dokončan in pripravljen za uporabo.</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         OUR EQUIPMENT / TECH
+    ========================================================= -->
+    <section class="py-24 bg-transparent">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid lg:grid-cols-12 gap-12 items-center">
+
+          <!-- Text -->
+          <div class="lg:col-span-7 space-y-8 reveal-item">
+            <span class="px-4 py-1.5 rounded-full bg-[#FF5E00]/15 text-[#FF5E00] border border-[#FF5E00]/30 text-xs font-extrabold uppercase tracking-widest">Naša oprema</span>
+            <h2 class="font-heading text-3xl sm:text-4xl font-extrabold text-white">Industrijsko opremljena delavnica</h2>
+            <p class="text-slate-300 text-sm leading-relaxed">
+              Naša delavnica v bližini Ljubljane razpolaga z vsem, kar potrebujemo za vrhunsko kovinsko obdelavo — od CNC plazemskega razreza do industrijske peči za prašno barvanje.
+            </p>
+
+            <div class="space-y-4">
+              <div class="flex items-start gap-4 p-4 rounded-2xl bg-[#12141C] border border-slate-800">
+                <div class="p-2.5 rounded-xl bg-[#FF5E00]/10 text-[#FF5E00] shrink-0">
+                  <i data-lucide="zap" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <div class="font-heading font-extrabold text-white text-sm">TIG &amp; MIG varilne postaje</div>
+                  <div class="text-xs text-slate-400 mt-1">Atestirani varilski postopki za jeklo, nerjavno jeklo in aluminij.</div>
+                </div>
+              </div>
+
+              <div class="flex items-start gap-4 p-4 rounded-2xl bg-[#12141C] border border-slate-800">
+                <div class="p-2.5 rounded-xl bg-[#FF5E00]/10 text-[#FF5E00] shrink-0">
+                  <i data-lucide="scan" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <div class="font-heading font-extrabold text-white text-sm">CNC plazemski razrez</div>
+                  <div class="text-xs text-slate-400 mt-1">Natančen razrez kovinskih plošč za lasersko natančne komponente.</div>
+                </div>
+              </div>
+
+              <div class="flex items-start gap-4 p-4 rounded-2xl bg-[#12141C] border border-slate-800">
+                <div class="p-2.5 rounded-xl bg-[#FF5E00]/10 text-[#FF5E00] shrink-0">
+                  <i data-lucide="paintbrush" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <div class="font-heading font-extrabold text-white text-sm">Peč za prašno barvanje</div>
+                  <div class="text-xs text-slate-400 mt-1">Visoko odporna prašna barva v poljubnem RAL odtenku za trajno površino.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Image -->
+          <div class="lg:col-span-5 reveal-item">
+            <div class="relative rounded-3xl overflow-hidden border border-[#FF5E00]/30 shadow-2xl">
+              <img src="/nadstesek.png" alt="VAREX izdelava" class="w-full h-[460px] object-cover" />
+              <div class="absolute inset-0 bg-gradient-to-t from-[#07080A] via-transparent to-transparent opacity-50"></div>
+              <span class="absolute top-4 right-4 bg-[#FF5E00] text-white text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-wider">VAREX delavnica</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         CTA SECTION
+    ========================================================= -->
+    <section class="py-24 bg-[#0B0C10]/40 border-t border-slate-800">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8 reveal-item">
+        
+        <div class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full asymmetric-badge text-[#FF5E00] text-xs font-extrabold uppercase tracking-widest">
+          <i data-lucide="sparkles" class="w-4 h-4 text-[#FFAA00]"></i>
+          <span>Začnite danes</span>
+        </div>
+
+        <h2 class="font-heading text-3xl sm:text-5xl font-extrabold text-white">Imate projekt v mislih?<br/> <span class="gradient-clash">Oddajte brezplačno povpraševanje</span></h2>
+        <p class="text-slate-300 text-base max-w-2xl mx-auto">
+          Pošljite nam kratek opis vašega projekta — pripravili vam bomo brezplačno in nezavezujočo okvirno ponudbo v 24 urah.
+        </p>
+
+        <div class="flex flex-wrap justify-center gap-4 pt-4">
+          <button onclick="openModal('quote-modal')" class="btn-orange-glow font-heading font-extrabold text-sm uppercase tracking-wider px-10 py-5 rounded-xl flex items-center gap-3 text-lg">
+            <i data-lucide="send" class="w-5 h-5"></i>
+            <span>Pridobite ponudbo</span>
+          </button>
+          <a href="tel:+38640123456" class="bg-white/5 hover:bg-[#FF5E00]/15 text-white border border-white/15 px-8 py-5 rounded-xl font-bold text-sm flex items-center gap-3 transition-all">
+            <i data-lucide="phone" class="w-5 h-5 text-[#FF5E00]"></i>
+            <span>040 123 456</span>
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =========================================================
+         FOOTER
+    ========================================================= -->
+    <footer class="bg-[#040507] text-slate-300 border-t border-slate-800/80 pt-16 pb-24 md:pb-12 text-sm">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+        
+        <!-- Top Contact Row -->
+        <div class="flex flex-col lg:flex-row justify-between items-center gap-8 pb-12 border-b border-slate-800/80">
+          
+          <div class="flex items-center gap-4">
+            <div class="logo-badge px-4 py-2.5 rounded-xl shadow-xl flex items-center justify-center">
+              <img src="/favicon.png" alt="VAREX Icon" class="h-9 w-auto object-contain" />
+            </div>
+            <span class="font-heading font-black text-3xl tracking-wider text-white">VAREX</span>
+          </div>
+
+          <div class="flex flex-wrap items-center justify-center lg:justify-end gap-8 sm:gap-12">
+            
+            <a href="tel:+38640123456" class="flex items-center gap-3.5 group">
+              <div class="w-12 h-12 rounded-full border border-slate-700 bg-[#0B0C10] flex items-center justify-center text-slate-200 group-hover:border-[#FF5E00] group-hover:text-[#FF5E00] transition-colors">
+                <i data-lucide="phone" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <div class="text-xs text-slate-400 font-medium">Telefon</div>
+                <div class="text-sm font-bold text-white group-hover:text-[#FF5E00] transition-colors">040 123 456</div>
+              </div>
+            </a>
+
+            <a href="mailto:info@varex.si" class="flex items-center gap-3.5 group">
+              <div class="w-12 h-12 rounded-full border border-slate-700 bg-[#0B0C10] flex items-center justify-center text-slate-200 group-hover:border-[#FF5E00] group-hover:text-[#FF5E00] transition-colors">
+                <i data-lucide="mail" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <div class="text-xs text-slate-400 font-medium">Email</div>
+                <div class="text-sm font-bold text-white group-hover:text-[#FF5E00] transition-colors">info@varex.si</div>
+              </div>
+            </a>
+
+            <div class="flex items-center gap-3.5">
+              <div class="w-12 h-12 rounded-full border border-slate-700 bg-[#0B0C10] flex items-center justify-center text-[#FF5E00]">
+                <i data-lucide="map-pin" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <div class="text-xs text-slate-400 font-medium">Lokacija</div>
+                <div class="text-sm font-bold text-white">Ljubljana z okolico (30km+)</div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- Middle Columns Row -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-12 py-6 border-b border-slate-800/80">
+          
+          <div class="space-y-4">
+            <h3 class="font-heading font-extrabold text-xl text-white">VAREX</h3>
+            <p class="text-xs text-slate-400 leading-relaxed max-w-sm">
+              VAREX je podjetje iz Ljubljane, specializirano za celovito izdelavo kovinskih nadstreškov, pergol, ograj ter zahtevnih varilnih del po meri. Odlikujejo nas vrhunski dizajni, napredne tehnologije in zanesljivost.
+            </p>
+            <div class="flex items-center gap-4 pt-2 text-slate-400">
+              <a href="#" class="p-2 rounded-full hover:text-[#FF5E00] transition-colors"><i data-lucide="instagram" class="w-4 h-4"></i></a>
+              <a href="#" class="p-2 rounded-full hover:text-[#FF5E00] transition-colors"><i data-lucide="facebook" class="w-4 h-4"></i></a>
+              <a href="#" class="p-2 rounded-full hover:text-[#FF5E00] transition-colors"><i data-lucide="twitter" class="w-4 h-4"></i></a>
+              <a href="#" class="p-2 rounded-full hover:text-[#FF5E00] transition-colors"><i data-lucide="linkedin" class="w-4 h-4"></i></a>
+            </div>
+          </div>
+
+          <div class="space-y-4">
+            <h4 class="font-heading font-extrabold text-base text-white">Hitra navigacija</h4>
+            <ul class="space-y-2.5 text-xs text-slate-400">
+              <li><a href="/" class="hover:text-[#FF5E00] transition-colors">Domov</a></li>
+              <li><a href="/o-nas.html" class="hover:text-[#FF5E00] transition-colors">Spoznaj ekipo / O nas</a></li>
+              <li><a href="/#storitve" class="hover:text-[#FF5E00] transition-colors">Storitve</a></li>
+              <li><a href="/#reference" class="hover:text-[#FF5E00] transition-colors">Projekti</a></li>
+              <li><a href="/faq.html" class="hover:text-[#FF5E00] transition-colors">FAQ</a></li>
+              <li><a href="/#kontakt" class="hover:text-[#FF5E00] transition-colors">Hiter kontakt</a></li>
+            </ul>
+          </div>
+
+          <div class="space-y-4">
+            <h4 class="font-heading font-extrabold text-base text-white">Pravni podatki</h4>
+            <ul class="space-y-2.5 text-xs text-slate-400">
+              <li><a href="#" onclick="openModal('quote-modal')" class="hover:text-[#FF5E00] transition-colors">Politika zasebnosti</a></li>
+              <li><a href="#" onclick="openModal('quote-modal')" class="hover:text-[#FF5E00] transition-colors">Pravila poslovanja</a></li>
+            </ul>
+          </div>
+
+        </div>
+
+        <!-- Bottom Copyright Row -->
+        <div class="pt-6 text-center text-xs text-slate-400 space-y-2">
+          <div class="text-slate-400">Sodelujemo z <span class="text-[#FF5E00] font-bold">INPRO GROUP d.o.o.</span></div>
+          <div>&copy; 2026 All Rights Reserved. | Spletno stran je izdelal <span class="text-white font-bold tracking-wider">VAREX</span></div>
+        </div>
+
+      </div>
+    </footer>
+
+    <!-- Mobile Sticky Call Bar -->
+    <div class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#07080A]/95 border-t border-[#FF5E00]/40 p-2.5 flex gap-2">
+      <a href="tel:+38640123456" class="flex-1 bg-emerald-600 text-white font-bold text-xs py-3 rounded-xl flex justify-center items-center gap-2 shadow-lg">
+        <i data-lucide="phone" class="w-4 h-4"></i> Pokličite zdaj
+      </a>
+      <button onclick="openModal('quote-modal')" class="flex-1 btn-orange-glow font-heading font-extrabold text-xs py-3 rounded-xl flex justify-center items-center gap-2">
+        <i data-lucide="send" class="w-4 h-4"></i> Povpraševanje
+      </button>
+    </div>
+
+    <!-- Quote Modal -->
+    <div id="quote-modal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
+      <div class="max-w-xl w-full bg-[#12141C] border border-[#FF5E00]/40 rounded-3xl p-6 relative">
+        <button onclick="closeModal('quote-modal')" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i data-lucide="x" class="w-6 h-6"></i></button>
+        <h3 class="font-heading text-xl font-extrabold text-white mb-4">Hitro povpraševanje za VAREX</h3>
+        <form onsubmit="handleFormSubmit(event)" class="space-y-4">
+          <input type="text" required placeholder="Ime in Priimek" class="w-full bg-[#181B26] border border-slate-800 rounded-xl p-3 text-white text-sm outline-none" />
+          <input type="tel" required placeholder="Telefonska številka" class="w-full bg-[#181B26] border border-slate-800 rounded-xl p-3 text-white text-sm outline-none" />
+          <input type="email" required placeholder="E-pošta" class="w-full bg-[#181B26] border border-slate-800 rounded-xl p-3 text-white text-sm outline-none" />
+          <button type="submit" class="w-full btn-orange-glow font-heading font-extrabold py-3.5 rounded-xl text-sm uppercase">Oddaj povpraševanje</button>
+        </form>
+      </div>
+    </div>
+
+  </div> <!-- End Page Wrapper -->
+
+  <script>
+    lucide.createIcons();
+
+    /* Scroll Reveal System */
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px 0px -100px 0px',
+      threshold: 0.15
+    };
+
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          entry.target.classList.remove('is-exited');
+        } else if (entry.boundingClientRect.top < 0) {
+          entry.target.classList.add('is-exited');
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.reveal-item').forEach(el => revealObserver.observe(el));
+
+    function toggleMobileMenu() {
+      document.getElementById('mobile-drawer').classList.toggle('hidden');
+    }
+
+    function openModal(id, serviceName) {
+      const modal = document.getElementById(id);
+      modal.classList.remove('hidden');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.add('hidden');
+    }
+
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      alert('Hvala! Vaše povpraševanje je bilo uspešno posredovano. Kontaktirali vas bomo v kratkem!');
+      if (window.confetti) confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+      closeModal('quote-modal');
+    }
+
+    /* ---------------------------------------------------------------
+       REACTIVE AMBIENT BACKGROUND — Mouse glow + welding spark embers
+    --------------------------------------------------------------- */
+    (function() {
+      // Mouse-reactive glow
+      const mouseGlow = document.getElementById('mouse-glow');
+      if (mouseGlow) {
+        document.addEventListener('mousemove', (e) => {
+          mouseGlow.style.left = e.clientX + 'px';
+          mouseGlow.style.top = e.clientY + 'px';
+          mouseGlow.style.opacity = '1';
+        });
+        document.addEventListener('mouseleave', () => {
+          mouseGlow.style.opacity = '0';
+        });
+      }
+
+      // Welding spark ember particles on canvas
+      const canvas = document.getElementById('spark-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+
+      function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      resize();
+      window.addEventListener('resize', resize);
+
+      const sparks = [];
+      const MAX_SPARKS = 35;
+
+      function Spark() {
+        this.reset();
+      }
+
+      Spark.prototype.reset = function() {
+        this.x = Math.random() * canvas.width;
+        this.y = canvas.height + 10;
+        this.size = Math.random() * 2.5 + 0.5;
+        this.speedY = -(Math.random() * 0.6 + 0.15);
+        this.speedX = (Math.random() - 0.5) * 0.3;
+        this.life = Math.random() * 300 + 150;
+        this.maxLife = this.life;
+        this.hue = Math.random() * 30 + 15; // 15-45 = orange-amber range
+        this.flicker = Math.random() * 0.5 + 0.5;
+      };
+
+      Spark.prototype.update = function() {
+        this.x += this.speedX + Math.sin(this.life * 0.02) * 0.15;
+        this.y += this.speedY;
+        this.life--;
+        this.flicker = 0.5 + Math.sin(this.life * 0.1) * 0.3;
+        if (this.life <= 0 || this.y < -20) this.reset();
+      };
+
+      Spark.prototype.draw = function() {
+        const alpha = Math.min(1, this.life / this.maxLife) * 0.6 * this.flicker;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = `hsla(${this.hue}, 100%, 55%, ${alpha})`;
+        ctx.fill();
+
+        // Soft glow around each spark
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size * 3, 0, Math.PI * 2);
+        ctx.fillStyle = `hsla(${this.hue}, 100%, 50%, ${alpha * 0.15})`;
+        ctx.fill();
+      };
+
+      for (let i = 0; i < MAX_SPARKS; i++) {
+        const s = new Spark();
+        s.life = Math.random() * s.maxLife; // stagger start positions
+        s.y = Math.random() * canvas.height;
+        sparks.push(s);
+      }
+
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        sparks.forEach(s => {
+          s.update();
+          s.draw();
+        });
+        requestAnimationFrame(animate);
+      }
+      animate();
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,208 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --bg-main: #0a0b0e;
+  --bg-surface: #12141c;
+  --bg-card: #181b26;
+  --bg-card-hover: #222636;
+  --accent-orange: #ff5e00;
+  --accent-orange-hover: #ff7722;
+  --accent-orange-glow: rgba(255, 94, 0, 0.35);
+  --accent-amber: #ffaa00;
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-orange: rgba(255, 94, 0, 0.3);
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --text-dark: #64748b;
+  --font-heading: 'Outfit', sans-serif;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-main);
+}
+::-webkit-scrollbar-thumb {
+  background: #2a2e3d;
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-orange);
+}
+
+/* Spark & Glow Effects */
+.orange-glow {
+  box-shadow: 0 0 25px var(--accent-orange-glow);
+}
+
+.orange-glow-text {
+  text-shadow: 0 0 15px rgba(255, 94, 0, 0.5);
+}
+
+.gradient-orange-text {
+  background: linear-gradient(135deg, #ffffff 30%, #ff5e00 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gradient-spark-text {
+  background: linear-gradient(135deg, #ffaa00 0%, #ff5e00 50%, #ff2200 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Glassmorphism Card */
+.glass-panel {
+  background: rgba(18, 20, 28, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-subtle);
+}
+
+.glass-panel-orange {
+  background: rgba(24, 27, 38, 0.85);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border-orange);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 94, 0, 0.1);
+}
+
+/* Spark Line Animation */
+@keyframes sparkPulse {
+  0%, 100% {
+    opacity: 0.6;
+    filter: drop-shadow(0 0 4px #ff5e00);
+  }
+  50% {
+    opacity: 1;
+    filter: drop-shadow(0 0 12px #ffaa00);
+  }
+}
+
+.spark-pulse {
+  animation: sparkPulse 2.5s infinite ease-in-out;
+}
+
+/* Custom Buttons */
+.btn-primary {
+  background: linear-gradient(135deg, #ff5e00 0%, #e04b00 100%);
+  color: #ffffff;
+  font-weight: 700;
+  border-radius: 8px;
+  padding: 0.85rem 1.8rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  box-shadow: 0 4px 20px rgba(255, 94, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(255, 94, 0, 0.55);
+  background: linear-gradient(135deg, #ff7722 0%, #ff5e00 100%);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 0.85rem 1.8rem;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 94, 0, 0.12);
+  border-color: var(--accent-orange);
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+.btn-call {
+  background: #10b981;
+  color: #ffffff;
+  font-weight: 700;
+  border-radius: 8px;
+  padding: 0.85rem 1.8rem;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
+  cursor: pointer;
+}
+
+.btn-call:hover {
+  background: #059669;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.5);
+}
+
+/* Badge styles */
+.badge-orange {
+  background: rgba(255, 94, 0, 0.15);
+  color: #ff7722;
+  border: 1px solid rgba(255, 94, 0, 0.3);
+  padding: 0.35rem 0.9rem;
+  border-radius: 9999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+/* Leaflet Map overrides for Dark Mode */
+.leaflet-container {
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  background: #111;
+  z-index: 10;
+}
+.leaflet-tile {
+  filter: brightness(0.6) invert(1) contrast(3) hue-rotate(200deg) saturate(0.3) brightness(0.7);
+}
+
+/* Animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
