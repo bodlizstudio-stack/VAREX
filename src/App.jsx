@@ -102,20 +102,16 @@ export default function App() {
             </h3>
 
             <div className="relative rounded-2xl overflow-hidden aspect-video bg-black flex items-center justify-center border border-white/10">
-              <img 
-                src="/welding_spark_craft.jpg" 
-                alt="Video Background" 
-                className="w-full h-full object-cover opacity-60" 
-              />
-              <div className="absolute inset-0 flex flex-col items-center justify-center space-y-3 bg-black/40 p-6 text-center">
-                <div className="w-16 h-16 rounded-full bg-[#FF5E00] text-white flex items-center justify-center animate-pulse shadow-2xl">
-                  <Play className="w-8 h-8 fill-current ml-1" />
-                </div>
-                <div className="text-white font-bold text-lg">Predstavitveni Video Delavnice</div>
-                <p className="text-xs text-slate-300 max-w-md">
-                  Prikaz natančnega TIG varjenja nosilnih profilov ter sestave bioklimatske pergole v Ljubljani.
-                </p>
-              </div>
+              <video 
+                controls 
+                autoPlay 
+                poster="/thumbnail.png" 
+                className="w-full h-full object-cover"
+              >
+                <source src="/video%20_varex.mp4" type="video/mp4" />
+                <source src="/video _varex.mp4" type="video/mp4" />
+                Vaš brskalnik ne podpira predvajanja videa.
+              </video>
             </div>
           </div>
         </div>
