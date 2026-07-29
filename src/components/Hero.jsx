@@ -90,7 +90,7 @@ export default function Hero({ onOpenQuoteModal, onOpenVideoModal }) {
         <div className="lg:col-span-5 relative">
           <div className="relative rounded-2xl overflow-hidden border border-[#FF5E00]/30 shadow-2xl group">
             <img 
-              src="/thumbnail.png" 
+              src="/thumbnail.jpeg?v=2" 
               alt="VAREX Natančno Varjenje" 
               className="w-full h-[460px] object-cover transition-transform duration-700 group-hover:scale-105" 
             />

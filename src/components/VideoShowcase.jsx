@@ -62,7 +62,7 @@ export default function VideoShowcase({ onOpenVideoModal }) {
                 className="relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl cursor-pointer group h-80 sm:h-96"
               >
                 <img 
-                  src="/thumbnail.png" 
+                  src="/thumbnail.jpeg?v=2" 
                   alt="VAREX Welding Showcase" 
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
                 />

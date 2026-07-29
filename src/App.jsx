@@ -105,7 +105,7 @@ export default function App() {
               <video 
                 controls 
                 autoPlay 
-                poster="/thumbnail.png" 
+                poster="/thumbnail.jpeg?v=2" 
                 className="w-full h-full object-cover"
               >
                 <source src="/video%20_varex.mp4" type="video/mp4" />
