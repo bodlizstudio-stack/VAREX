@@ -15,7 +15,7 @@ export default function Footer({ onOpenLegal }) {
           {/* Col 1: Brand */}
           <div className="lg:col-span-2 space-y-4">
             <div className="flex items-center gap-3">
-              <img src="/logo.png" alt="VAREX Logo" className="h-10 w-auto object-contain" />
+              <img src="/logo_temna.png?v=2" alt="VAREX Logo" className="h-10 w-auto object-contain" />
               <span className="text-2xl font-extrabold text-white tracking-wider">VAREX</span>
             </div>
             <p className="text-xs text-slate-400 max-w-sm leading-relaxed">

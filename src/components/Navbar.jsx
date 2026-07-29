@@ -43,7 +43,7 @@ export default function Navbar({ onOpenQuoteModal }) {
         {/* Brand Logo */}
         <a href="#domov" className="flex items-center gap-3 group">
           <img 
-            src="/logo.png" 
+            src="/logo_temna.png?v=2" 
             alt="VAREX Logo" 
             className="h-11 w-auto object-contain transition-transform group-hover:scale-105" 
           />
