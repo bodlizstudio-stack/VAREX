@@ -43,9 +43,9 @@
     }
   </script>
 
-  <!-- Lucide & Canvas Confetti -->
-  <script src="https://unpkg.com/lucide@latest"></script>
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.4/dist/confetti.browser.min.js"></script>
+  <!-- Lucide & Canvas Confetti (defer so mobile is not blocked) -->
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.469.0/dist/umd/lucide.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.4/dist/confetti.browser.min.js" defer></script>
 
   <style>
     :root {
@@ -80,6 +80,7 @@
     }
     .preloader-overlay.exit {
       animation: preloaderExit 0.5s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+      pointer-events: none;
     }
     @keyframes preloaderExit {
       to { opacity: 0; transform: translateY(-100%); }
@@ -389,6 +390,21 @@
     .reveal-item.is-exited {
       opacity: 0.15;
       transform: translateY(-20px) scale(0.97);
+    }
+
+    @media (max-width: 768px) {
+      .reveal-item,
+      .reveal-item.is-exited {
+        opacity: 1 !important;
+        transform: none !important;
+        filter: none !important;
+        will-change: auto;
+      }
+      #spark-canvas,
+      #mouse-glow { display: none !important; }
+      .preloader-overlay {
+        animation: none;
+      }
     }
 
     /* -------------------------------------------------------------
@@ -1136,7 +1152,7 @@
           <span>VAREX Industrijska Izdelava in Varjenje po Meri</span>
         </h3>
         <div class="aspect-video bg-black rounded-2xl overflow-hidden relative flex items-center justify-center border border-white/10">
-          <video id="varex-video-player" controls poster="/thumbnail.jpeg?v=2" class="w-full h-full object-cover">
+          <video id="varex-video-player" controls preload="none" poster="/thumbnail.jpeg?v=2" class="w-full h-full object-cover">
             <source src="/video%20_varex.mp4" type="video/mp4" />
             <source src="/video _varex.mp4" type="video/mp4" />
             Vaš brskalnik ne podpira predvajanja videa.
@@ -1148,7 +1164,28 @@
   </div> <!-- End Page Wrapper -->
 
   <script>
-    lucide.createIcons();
+    function safeIcons() {
+      try { if (window.lucide) lucide.createIcons(); } catch (e) {}
+    }
+
+    function hidePreloader() {
+      const preloader = document.getElementById('preloader');
+      if (!preloader || preloader.dataset.done === '1') return;
+      preloader.dataset.done = '1';
+      preloader.classList.add('exit');
+      preloader.style.pointerEvents = 'none';
+      setTimeout(() => {
+        preloader.style.display = 'none';
+      }, 400);
+    }
+
+    const isMobile = window.matchMedia('(max-width: 768px), (pointer: coarse)').matches;
+    setTimeout(hidePreloader, isMobile ? 700 : 1400);
+    window.addEventListener('load', hidePreloader);
+    setTimeout(hidePreloader, 2200);
+
+    safeIcons();
+    window.addEventListener('load', safeIcons);
 
     // Fence image slider functions
     const fenceImages = ['/ograja.png', '/ograja1.png'];
@@ -1170,26 +1207,20 @@
 
     /* Preloader Animation Controller — Scale Up join + slide up */
     window.addEventListener('DOMContentLoaded', () => {
-      const preloader = document.getElementById('preloader');
       const header = document.getElementById('site-header');
       if (header) {
         const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 24);
         onScroll();
         window.addEventListener('scroll', onScroll, { passive: true });
       }
-      renderServiceDots('nadstresek');
-      renderServiceDots('ograja');
-      bindGallerySwipe('nadstresek');
-      bindGallerySwipe('ograja');
-      bindZoomSwipe();
-      if (!preloader) return;
-      preloader.classList.add('hold');
-      if (window.lucide) lucide.createIcons();
-      const holdMs = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 1400;
-      setTimeout(() => {
-        preloader.classList.add('exit');
-        setTimeout(() => { preloader.style.display = 'none'; }, 500);
-      }, holdMs);
+      try {
+        renderServiceDots('nadstresek');
+        renderServiceDots('ograja');
+        bindGallerySwipe('nadstresek');
+        bindGallerySwipe('ograja');
+        bindZoomSwipe();
+      } catch (e) {}
+      safeIcons();
     });
 
     /* Scroll Reveal System */
@@ -1453,7 +1484,7 @@
 
       // Welding spark ember particles on canvas
       const canvas = document.getElementById('spark-canvas');
-      if (!canvas) return;
+      if (!canvas || window.matchMedia('(max-width: 768px), (pointer: coarse)').matches) return;
       const ctx = canvas.getContext('2d');
 
       function resize() {

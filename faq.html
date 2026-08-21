@@ -42,7 +42,7 @@
   </script>
 
   <!-- Lucide & Canvas Confetti -->
-  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.469.0/dist/umd/lucide.min.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.4/dist/confetti.browser.min.js"></script>
 
   <style>
@@ -618,7 +618,7 @@
   </div> <!-- End Page Wrapper -->
 
   <script>
-    lucide.createIcons();
+    window.addEventListener('load', () => { try { if (window.lucide) lucide.createIcons(); } catch (e) {} });
     window.addEventListener('scroll', () => {
       const header = document.getElementById('site-header');
       if (header) header.classList.toggle('scrolled', window.scrollY > 24);
