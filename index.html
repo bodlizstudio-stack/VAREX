@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>VAREX | Premium Kovinarstvo &amp; Varjenje po Meri | Ljubljana</title>
-  <meta name="description" content="Vrhunska izdelava kovinskih nadstreškov, modernih pergol, ograj in profesionalno varjenje po meri v Ljubljani in okolici. Hitra izvedba in 100% zanesljivost." />
+  <title>VAREX – kovinarski izdelki in konstrukcije po meri | Ljubljana</title>
+  <meta name="description" content="VAREX izdeluje kovinarske izdelke in konstrukcije po meri: nadstreški, ograje, vrata in unikatni izdelki. Kovinarstvo Ljubljana — od ideje do profesionalne montaže." />
   
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="/favicon.png" />
@@ -15,8 +15,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- Leaflet CSS for Map -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+  <!-- Leaflet CSS removed — Google Maps embed -->
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -69,66 +68,307 @@
       letter-spacing: -0.02em;
     }
 
-    /* -------------------------------------------------------------
-       PRELOADER ANIMATION STYLES
-    ------------------------------------------------------------- */
-    #preloader {
+    /* Scale Up-style logo join preloader */
+    .preloader-overlay {
       position: fixed;
       inset: 0;
       z-index: 9999;
-      background-color: #07080A;
+      background: #000000;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      transition: opacity 0.8s cubic-bezier(0.77, 0, 0.175, 1), visibility 0.8s;
     }
-
-    .logo-container {
+    .preloader-overlay.exit {
+      animation: preloaderExit 0.5s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+    }
+    @keyframes preloaderExit {
+      to { opacity: 0; transform: translateY(-100%); }
+    }
+    .preloader-logo-stage {
       position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transform: scale(0.9);
-      animation: logoEntrance 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      width: 420px;
+      height: 140px;
     }
-
-    @keyframes logoEntrance {
-      0% { opacity: 0; transform: scale(0.8) translateY(20px); }
-      100% { opacity: 1; transform: scale(1) translateY(0); }
+    @media (max-width: 480px) {
+      .preloader-logo-stage { width: 300px; height: 100px; }
     }
-
-    /* Welding Spark Pulse Effect */
-    .spark-glow {
-      position: absolute;
-      top: 15%;
-      right: 18%;
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      background: radial-gradient(circle, #FFAA00 0%, #FF5E00 60%, transparent 100%);
-      filter: blur(12px);
-      animation: sparkFlash 1s infinite alternate ease-in-out;
-    }
-
-    @keyframes sparkFlash {
-      0% { transform: scale(0.6); opacity: 0.3; filter: blur(8px); }
-      50% { transform: scale(1.6); opacity: 1; filter: blur(20px); box-shadow: 0 0 40px #FF5E00; }
-      100% { transform: scale(0.9); opacity: 0.5; filter: blur(10px); }
-    }
-
-    /* Transition Screen Flare */
-    #spark-flare {
+    .preloader-piece {
       position: absolute;
       inset: 0;
-      background: radial-gradient(circle at 50% 50%, rgba(255, 94, 0, 0.8) 0%, rgba(255, 170, 0, 0.2) 40%, transparent 80%);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.4s ease-out;
+      overflow: hidden;
     }
+    .preloader-lockup {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      width: 100%;
+      height: 100%;
+    }
+    .preloader-lockup img {
+      height: 88px;
+      width: auto;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
+    .preloader-word {
+      font-family: var(--font-heading);
+      font-weight: 800;
+      font-size: 3.4rem;
+      letter-spacing: 0.22em;
+      color: #fff;
+      line-height: 1;
+    }
+    @media (max-width: 480px) {
+      .preloader-lockup { gap: 0.65rem; }
+      .preloader-lockup img { height: 62px; }
+      .preloader-word { font-size: 2.2rem; letter-spacing: 0.16em; }
+    }
+    .preloader-piece--left {
+      clip-path: polygon(0 0, 55% 0, 45% 100%, 0 100%);
+      opacity: 0;
+      transform: translate(-60px, -30px);
+      animation: joinFromLeft 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards;
+    }
+    .preloader-piece--right {
+      clip-path: polygon(55% 0, 100% 0, 100% 100%, 45% 100%);
+      opacity: 0;
+      transform: translate(60px, 30px);
+      animation: joinFromRight 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards;
+    }
+    .preloader-piece--full {
+      opacity: 0;
+      animation: revealFull 0.4s 0.85s forwards;
+    }
+    .preloader-overlay.hold .preloader-piece--full {
+      filter: none;
+    }
+    @keyframes joinFromLeft {
+      0% { opacity: 0; transform: translate(-60px, -30px); }
+      20% { opacity: 1; }
+      100% { opacity: 1; transform: translate(0, 0); }
+    }
+    @keyframes joinFromRight {
+      0% { opacity: 0; transform: translate(60px, 30px); }
+      20% { opacity: 1; }
+      100% { opacity: 1; transform: translate(0, 0); }
+    }
+    @keyframes revealFull { to { opacity: 1; } }
 
-    .flare-active {
-      opacity: 1 !important;
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 200;
+      width: 100%;
+      background: transparent;
+      border-bottom: 1px solid transparent;
+      transition: background 0.4s, border-color 0.4s, box-shadow 0.4s;
+    }
+    .navbar.scrolled {
+      background: rgba(7, 8, 10, 0.88);
+      backdrop-filter: blur(20px);
+      border-bottom-color: rgba(255, 255, 255, 0.08);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    }
+    .navbar-inner {
+      height: 80px;
+      transition: height 0.4s;
+    }
+    .navbar.scrolled .navbar-inner { height: 64px; }
+    .nav-link {
+      position: relative;
+      letter-spacing: 0.5px;
+    }
+    .nav-link:after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      right: 50%;
+      bottom: -4px;
+      height: 2px;
+      background: linear-gradient(90deg, #FF5E00, #FFAA00);
+      opacity: 0;
+      transition: left 0.3s, right 0.3s, opacity 0.3s;
+    }
+    .nav-link:hover:after { opacity: 1; left: 0; right: 0; }
+    .nav-phone-link {
+      display: none;
+    }
+    @media (min-width: 900px) {
+      .nav-phone-link { display: inline-flex; }
+    }
+    .footer-logo-pill {
+      background: #fff;
+      border-radius: 100px;
+      padding: 0.85rem 2.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+    .promo-light {
+      background: linear-gradient(180deg, #f6f1e8 0%, #efe8db 100%);
+      color: #161616;
+      border: 1px solid rgba(255, 94, 0, 0.2);
+    }
+    .svc-photo {
+      background: #0B0C10;
+      aspect-ratio: 4 / 3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+      cursor: zoom-in;
+    }
+    .svc-photo img {
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+    }
+    .svc-card {
+      text-align: left;
+      width: 100%;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .svc-card:hover { border-color: #FF5E00; }
+    .svc-body {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      margin-top: 0;
+      transition: max-height 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s, margin 0.3s;
+    }
+    .svc-hint {
+      display: none;
+      font-size: 11px;
+      font-weight: 700;
+      color: #94a3b8;
+      margin-top: 0.5rem;
+    }
+    @media (hover: hover) and (pointer: fine) {
+      .svc-card:hover .svc-body,
+      .svc-card:focus-within .svc-body {
+        max-height: 320px;
+        opacity: 1;
+        margin-top: 0.85rem;
+      }
+      .svc-hint { display: block; }
+    }
+    @media (hover: none), (pointer: coarse) {
+      .svc-body {
+        max-height: none;
+        opacity: 1;
+        overflow: visible;
+        margin-top: 0.85rem;
+      }
+      .svc-hint { display: none; }
+      .svc-nav {
+        width: 44px;
+        height: 44px;
+      }
+      .svc-zoom-panel {
+        max-height: 92vh;
+        overflow-y: auto;
+      }
+      .svc-zoom-img-wrap {
+        max-height: 40vh;
+        min-height: 180px;
+      }
+      .svc-zoom-img-wrap img { max-height: 40vh; }
+    }
+    .svc-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 2;
+      width: 34px;
+      height: 34px;
+      border-radius: 9999px;
+      background: rgba(0,0,0,0.65);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+    .svc-nav:hover { background: #FF5E00; }
+    .svc-nav--prev { left: 10px; }
+    .svc-nav--next { right: 10px; }
+    .svc-dots {
+      position: absolute;
+      bottom: 10px;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      z-index: 2;
+    }
+    .svc-dots span {
+      width: 7px;
+      height: 7px;
+      border-radius: 9999px;
+      background: rgba(255,255,255,0.35);
+    }
+    .svc-dots span.is-on { background: #FF5E00; }
+    .svc-zoom-img-wrap {
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 240px;
+      max-height: 52vh;
+      position: relative;
+    }
+    .svc-zoom-img-wrap img {
+      max-width: 100%;
+      max-height: 52vh;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+    }
+    .ref-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 1.5rem;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: #12141C;
+      min-height: 280px;
+    }
+    .ref-card img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .ref-card:hover img { transform: scale(1.07); }
+    .ref-card-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background: linear-gradient(180deg, rgba(7,8,10,0.08) 20%, rgba(7,8,10,0.92) 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1.5rem;
+    }
+    .ref-card:hover { border-color: rgba(255, 94, 0, 0.45); }
+    @media (prefers-reduced-motion: reduce) {
+      .ref-card:hover img { transform: none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .preloader-overlay { display: none; }
+      .preloader-piece--left, .preloader-piece--right, .preloader-piece--full {
+        animation: none;
+        opacity: 1;
+        transform: none;
+      }
     }
 
     /* -------------------------------------------------------------
@@ -301,28 +541,26 @@
   <div id="mouse-glow"></div>
   <canvas id="spark-canvas"></canvas>
 
-  <!-- =========================================================
-       1. THE PRELOADER (LOGO LOADING ANIMATION WITH FAVICON.PNG ON WHITE BADGE)
-  ========================================================= -->
-  <div id="preloader">
-    <div id="spark-flare"></div>
-    <div class="logo-container flex flex-col items-center">
-      <div class="relative mb-6">
-        <!-- Logo Container with logo_temna.png -->
-        <div class="logo-badge">
-          <img src="/logo_temna.png?v=2" alt="VAREX Logo" class="h-16 w-auto object-contain relative z-10" />
+  <!-- Scale Up-style logo join preloader -->
+  <div id="preloader" class="preloader-overlay">
+    <div class="preloader-logo-stage">
+      <div class="preloader-piece preloader-piece--left">
+        <div class="preloader-lockup">
+          <img src="/varex-v-logo.png?v=3" alt="" />
+          <span class="preloader-word">VAREX</span>
         </div>
-        <div class="spark-glow"></div>
       </div>
-
-      <div class="flex flex-col items-center space-y-1 z-10">
-        <span class="font-heading text-4xl font-black tracking-widest text-white">VAREX</span>
-        <span class="text-[11px] text-[#FF5E00] font-bold tracking-[0.3em] uppercase">Kovinarstvo po Meri</span>
+      <div class="preloader-piece preloader-piece--right">
+        <div class="preloader-lockup">
+          <img src="/varex-v-logo.png?v=3" alt="" />
+          <span class="preloader-word">VAREX</span>
+        </div>
       </div>
-
-      <!-- Loading Bar -->
-      <div class="w-48 h-1 bg-slate-900 rounded-full mt-6 overflow-hidden relative z-10">
-        <div id="preloader-bar" class="h-full bg-gradient-to-r from-[#FF5E00] to-[#FFAA00] w-0 transition-all duration-300"></div>
+      <div class="preloader-piece preloader-piece--full">
+        <div class="preloader-lockup">
+          <img src="/varex-v-logo.png?v=3" alt="VAREX" />
+          <span class="preloader-word">VAREX</span>
+        </div>
       </div>
     </div>
   </div>
@@ -332,86 +570,52 @@
   ========================================================= -->
   <div id="page-wrapper" class="page-wrapper opacity-100">
 
-    <!-- Top Announcement Bar -->
-    <div class="bg-[#0B0C10] border-b border-white/5 py-2 px-4 text-xs font-medium text-slate-300">
-      <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-2">
-        <div class="flex items-center gap-4 text-slate-400">
-          <span class="flex items-center gap-1.5">
-            <i data-lucide="map-pin" class="w-3.5 h-3.5 text-[#FF5E00]"></i>
-            Ljubljana &amp; širša okolica (30km+ radij)
-          </span>
-          <span class="hidden sm:inline-flex items-center gap-1.5 text-emerald-400 font-semibold">
-            <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
-            100% Natančna izvedba &amp; Atestirano Varjenje
-          </span>
-        </div>
-        <div class="flex items-center gap-4 ml-auto">
-          <a href="mailto:info@varex.si" class="flex items-center gap-1.5 hover:text-[#FF5E00] transition-colors">
-            <i data-lucide="mail" class="w-3.5 h-3.5 text-[#FF5E00]"></i>
-            info@varex.si
-          </a>
-          <a href="tel:+38640123456" class="flex items-center gap-1.5 font-bold text-white hover:text-[#FF5E00] transition-colors bg-[#FF5E00]/10 px-3 py-1 rounded-lg border border-[#FF5E00]/30">
-            <i data-lucide="phone" class="w-3.5 h-3.5 text-[#FF5E00]"></i>
-            040 123 456
-          </a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Header / Navbar with Professional White Logo Badge & White Text -->
-    <header class="sticky top-0 z-40 bg-[#07080A]/95 backdrop-blur-xl border-b border-slate-800/80">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between">
-        
-        <!-- Logo: Dark VAREX Logo (logo_temna.png) + WHITE VAREX TEXT -->
-        <a href="#domov" onclick="navigateToSection(event, '#domov')" class="flex items-center gap-3.5 group">
-          <div class="logo-badge group-hover:scale-105 transition-transform">
-            <img src="/logo_temna.png?v=2" alt="VAREX Logo" class="h-10 w-auto object-contain" />
-          </div>
-          <div class="flex flex-col">
-            <span class="font-heading font-black text-2xl tracking-wider text-white">VAREX</span>
-            <span class="text-[9px] text-slate-400 uppercase tracking-[0.2em] -mt-1 font-bold">Kovinarstvo po Meri</span>
-          </div>
+    <!-- Scale Up-style header -->
+    <header id="site-header" class="navbar">
+      <div class="navbar-inner max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
+        <a href="#domov" onclick="navigateToSection(event, '#domov')" class="flex items-center gap-3 shrink-0">
+          <img src="/logo_temna.png?v=2" alt="VAREX" class="h-9 w-auto object-contain" />
+          <span class="font-heading font-black text-xl tracking-wider text-white">VAREX</span>
         </a>
 
-        <!-- Desktop Links with Page Transition Trigger -->
-        <nav class="hidden md:flex items-center gap-8 font-semibold text-xs tracking-wider uppercase text-slate-300">
-          <a href="/" class="hover:text-[#FF5E00] transition-colors">Začetna</a>
-          <a href="/#storitve" class="hover:text-[#FF5E00] transition-colors">Storitve</a>
-          <a href="/o-nas.html" class="hover:text-[#FF5E00] transition-colors">O nas</a>
-          <a href="/#reference" class="hover:text-[#FF5E00] transition-colors">Reference</a>
-          <a href="/faq.html" class="hover:text-[#FF5E00] transition-colors">FAQ</a>
-          <a href="/#kontakt" class="hover:text-[#FF5E00] transition-colors">Kontakt</a>
+        <nav class="hidden md:flex items-center gap-1 font-semibold text-xs tracking-wider uppercase text-slate-400">
+          <a href="/" class="nav-link hover:text-white px-3 py-2">Domov</a>
+          <a href="/#storitve" class="nav-link hover:text-white px-3 py-2">Storitve</a>
+          <a href="/o-nas.html" class="nav-link hover:text-white px-3 py-2">O nas</a>
+          <a href="/#reference" class="nav-link hover:text-white px-3 py-2">Reference</a>
+          <a href="/faq.html" class="nav-link hover:text-white px-3 py-2">FAQ</a>
+          <a href="/#kontakt" class="nav-link hover:text-white px-3 py-2">Kontakt</a>
         </nav>
 
-        <div class="hidden lg:flex items-center gap-4">
-          <button onclick="openModal('quote-modal')" class="btn-orange-glow font-heading font-extrabold text-xs tracking-wider uppercase px-6 py-3 rounded-xl flex items-center gap-2">
-            <span>Brezplačno Povpraševanje</span>
+        <div class="flex items-center gap-3">
+          <a href="tel:+38630370180" class="nav-phone-link items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-2 text-xs font-semibold text-slate-300 hover:text-[#FF5E00] hover:border-[#FF5E00]/40 transition-colors">
+            <i data-lucide="phone" class="w-3.5 h-3.5 text-[#FF5E00]"></i>
+            030 370 180
+          </a>
+          <a href="#kontakt" class="hidden lg:inline-flex btn-orange-glow font-heading font-extrabold text-xs tracking-wider uppercase px-5 py-2.5 rounded-full">
+            Pridobite ponudbo
+          </a>
+          <button onclick="toggleMobileMenu()" class="md:hidden p-2 text-slate-300" aria-label="Meni">
+            <i data-lucide="menu" class="w-6 h-6"></i>
           </button>
         </div>
-
-        <button onclick="toggleMobileMenu()" class="md:hidden p-2 text-slate-300">
-          <i data-lucide="menu" class="w-6 h-6"></i>
-        </button>
       </div>
 
-      <!-- Mobile Menu Drawer -->
-      <div id="mobile-drawer" class="hidden md:hidden bg-[#0B0C10] border-b border-slate-800 px-6 py-6 space-y-4 text-center">
-        <a href="/" onclick="toggleMobileMenu()" class="block py-2 font-bold text-slate-200 hover:text-[#FF5E00]">Začetna</a>
+      <div id="mobile-drawer" class="hidden md:hidden bg-[#07080A]/95 backdrop-blur-xl border-t border-white/10 px-6 py-6 space-y-3 text-center">
+        <a href="/" onclick="toggleMobileMenu()" class="block py-2 font-bold text-slate-200 hover:text-[#FF5E00]">Domov</a>
         <a href="/#storitve" onclick="toggleMobileMenu()" class="block py-2 font-bold text-slate-200 hover:text-[#FF5E00]">Storitve</a>
         <a href="/o-nas.html" onclick="toggleMobileMenu()" class="block py-2 font-bold text-slate-200 hover:text-[#FF5E00]">O nas</a>
         <a href="/#reference" onclick="toggleMobileMenu()" class="block py-2 font-bold text-slate-200 hover:text-[#FF5E00]">Reference</a>
         <a href="/faq.html" onclick="toggleMobileMenu()" class="block py-2 font-bold text-slate-200 hover:text-[#FF5E00]">FAQ</a>
         <a href="/#kontakt" onclick="toggleMobileMenu()" class="block py-2 font-bold text-slate-200 hover:text-[#FF5E00]">Kontakt</a>
-        <button onclick="toggleMobileMenu(); openModal('quote-modal')" class="w-full btn-orange-glow font-heading font-extrabold py-3.5 rounded-xl uppercase tracking-wider text-xs">
-          Brezplačno Povpraševanje
-        </button>
+        <a href="tel:+38630370180" class="block py-2 font-bold text-[#FF5E00]">030 370 180</a>
       </div>
     </header>
 
     <!-- =========================================================
          3. ASYMMETRICAL HERO SECTION (CLASH DISPLAY TYPOGRAPHY)
     ========================================================= -->
-    <section id="domov" class="relative min-h-[92vh] flex items-center justify-center overflow-hidden py-16 bg-transparent">
+    <section id="domov" class="relative min-h-[92vh] flex items-center justify-center overflow-hidden pt-28 pb-16 bg-transparent">
       
       <!-- Asymmetrical Orange Spark Light Glow Overlay -->
       <div class="absolute -top-32 -left-32 w-[650px] h-[650px] bg-[#FF5E00]/12 rounded-full blur-[150px] pointer-events-none"></div>
@@ -426,66 +630,48 @@
             
             <div class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full asymmetric-badge text-[#FF5E00] text-xs font-extrabold uppercase tracking-widest">
               <i data-lucide="zap" class="w-4 h-4 text-[#FFAA00]"></i>
-              <span>Vrhunsko kovinarstvo v Ljubljani &amp; okolici</span>
+              <span>Kovinarstvo v Ljubljani in okolici</span>
             </div>
 
             <!-- Main Clash Display H1 Headline -->
             <h1 class="font-heading font-black text-4xl sm:text-6xl lg:text-7xl leading-[1.05] tracking-tight text-white">
-              Arhitekturni <br/>
-              <span class="gradient-clash">Nadstreški &amp; pergole</span> <br/>
-              z atestom varjenja
+              IZ KOVINE <br/>
+              <span class="gradient-clash">USTVARJAMO VEČ.</span>
             </h1>
 
+            <p class="text-lg sm:text-xl font-semibold text-slate-100">
+              Kovinarski izdelki in konstrukcije po meri.
+            </p>
+
             <p class="text-base sm:text-lg text-slate-300 max-w-xl font-normal leading-relaxed">
-              Brezkompromisna natančnost, ultimativna zanesljivost ter hitra izvedba. 
-              Projektiramo in izdelujemo unikatne kovinske nadstreške, bioklimatske pergole ter ograje po meri.
+              Od ideje do končne izvedbe. Izdelujemo kovinske konstrukcije, nadstreške, ograje, vrata in unikatne izdelke po meri za domove in poslovne objekte.
             </p>
 
             <div class="flex flex-wrap items-center gap-4 pt-2">
-              <button onclick="openModal('quote-modal')" class="btn-orange-glow font-heading font-extrabold text-sm uppercase tracking-wider px-8 py-4 rounded-xl flex items-center gap-3">
+              <button onclick="document.getElementById('kontakt').scrollIntoView({behavior:'smooth'})" class="btn-orange-glow font-heading font-extrabold text-sm uppercase tracking-wider px-8 py-4 rounded-xl flex items-center gap-3">
                 <span>Pridobite Ponudbo</span>
                 <i data-lucide="arrow-right" class="w-5 h-5"></i>
               </button>
 
-              <a href="tel:+38640123456" class="bg-white/5 hover:bg-[#FF5E00]/15 text-white border border-white/15 px-6 py-4 rounded-xl font-bold text-sm flex items-center gap-3 transition-all">
+              <a href="tel:+38630370180" class="bg-white/5 hover:bg-[#FF5E00]/15 text-white border border-white/15 px-6 py-4 rounded-xl font-bold text-sm flex items-center gap-3 transition-all">
                 <i data-lucide="phone" class="w-5 h-5 text-[#FF5E00]"></i>
-                <span>Pokličite: 040 123 456</span>
+                <span>Pokličite 030 370 180</span>
               </a>
             </div>
 
-            <!-- Clean USP Checklist -->
-            <div class="pt-8 border-t border-slate-800/80 flex flex-wrap gap-x-8 gap-y-4 text-sm font-semibold text-slate-300">
-              <div class="flex items-center gap-2.5">
-                <i data-lucide="check-circle" class="w-5 h-5 text-[#FF5E00] shrink-0"></i>
-                <span>100% spoštovanje rokov</span>
-              </div>
-              <div class="flex items-center gap-2.5">
-                <i data-lucide="check-circle" class="w-5 h-5 text-[#FF5E00] shrink-0"></i>
-                <span>Profesionalna montaža</span>
-              </div>
-            </div>
 
           </div>
 
           <div class="lg:col-span-5 lg:-ml-12 z-10 relative reveal-item">
-            <div class="relative rounded-3xl overflow-hidden border border-[#FF5E00]/40 shadow-2xl group cursor-pointer" onclick="openModal('video-modal')">
-              <img src="/thumbnail.jpeg?v=2" alt="VAREX Precision Welding" class="w-full h-[520px] object-cover group-hover:scale-105 transition-transform duration-700" />
+            <div class="relative rounded-3xl overflow-hidden border border-[#FF5E00]/40 shadow-2xl group">
+              <img src="/thumbnail.jpeg?v=2" alt="Predstavitveni video VAREX" class="w-full h-[520px] object-cover group-hover:scale-105 transition-transform duration-700" />
               <div class="absolute inset-0 bg-gradient-to-t from-[#07080A] via-transparent to-transparent opacity-90"></div>
-
-              <!-- Spark Play Trigger -->
-              <div class="absolute inset-0 m-auto w-20 h-20 rounded-full bg-[#FF5E00] text-white flex items-center justify-center shadow-2xl border-4 border-white/20 group-hover:scale-110 transition-transform">
+              <div class="absolute inset-0 m-auto w-20 h-20 rounded-full bg-[#FF5E00] text-white flex items-center justify-center shadow-2xl border-4 border-white/20">
                 <i data-lucide="play" class="w-8 h-8 fill-current ml-1"></i>
               </div>
-
-              <!-- Overlapping Floating Glass Badge -->
-              <div class="absolute bottom-6 left-6 right-6 p-5 rounded-2xl bg-[#12141C]/90 backdrop-blur-xl border border-white/10 flex items-center gap-4 shadow-2xl">
-                <div class="p-3.5 rounded-xl bg-[#FF5E00]/20 text-[#FF5E00]">
-                  <i data-lucide="shield-check" class="w-6 h-6"></i>
-                </div>
-                <div>
-                  <div class="font-heading font-extrabold text-sm text-white">Atestirani varilski postopki</div>
-                  <div class="text-xs text-slate-400">TIG &amp; MIG industrijska izdelava in antikorozija</div>
-                </div>
+              <div class="absolute bottom-6 left-6 right-6 p-5 rounded-2xl bg-[#12141C]/90 backdrop-blur-xl border border-white/10 shadow-2xl">
+                <div class="font-heading font-extrabold text-sm text-white">Predstavitveni video</div>
+                <div class="text-xs text-slate-400">Kmalu na voljo — video še snemamo.</div>
               </div>
             </div>
           </div>
@@ -503,102 +689,75 @@
         
         <div class="text-center max-w-3xl mx-auto space-y-4 reveal-item">
           <span class="px-4 py-1.5 rounded-full bg-[#FF5E00]/15 text-[#FF5E00] border border-[#FF5E00]/30 text-xs font-extrabold uppercase tracking-widest">Storitve VAREX</span>
-          <h2 class="font-heading text-3xl sm:text-5xl font-extrabold text-white">Vrhunska kovinska izdelava po meri</h2>
-          <p class="text-slate-400 text-base">Ključna področja: kovinski nadstreški, bioklimatske pergole, dvoriščne ograje in varilna dela.</p>
+          <h2 class="font-heading text-3xl sm:text-5xl font-extrabold text-white">Vrhunska kovinarska izvedba po meri.</h2>
+          <p class="text-slate-400 text-base">Nadstreški in konstrukcije, ograje in vrata ter unikatni izdelki po meri.</p>
         </div>
 
-        <div class="grid lg:grid-cols-12 gap-8">
-          
-          <!-- Services Cards List (8 Cols) -->
-          <div class="lg:col-span-8 space-y-6">
-            
-            <!-- Service 1 -->
-            <div class="bg-[#12141C] border border-slate-800 hover:border-[#FF5E00] rounded-3xl p-8 transition-all duration-300 reveal-item space-y-4 shadow-xl">
-              <div class="flex items-start justify-between">
-                <div class="space-y-2">
-                  <span class="text-xs font-extrabold text-[#FF5E00] uppercase tracking-wider">Top Izbira</span>
-                  <h3 class="font-heading text-2xl font-extrabold text-white">Kovinski nadstreški za avtomobile &amp; terase</h3>
-                </div>
-                <div class="p-3 rounded-2xl bg-[#FF5E00]/10 text-[#FF5E00]">
-                  <i data-lucide="home" class="w-6 h-6"></i>
-                </div>
+        <div class="max-w-3xl mx-auto promo-light rounded-3xl p-6 sm:p-8 reveal-item shadow-xl relative overflow-hidden">
+          <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#FF5E00] to-[#FFAA00]"></div>
+          <span class="inline-block mb-3 px-3 py-1 rounded-full bg-[#FF5E00] text-white text-[10px] font-extrabold uppercase tracking-widest">10% popust</span>
+          <h3 class="font-heading text-xl sm:text-2xl font-extrabold text-[#161616]">Prvič sodelujete z VAREX?</h3>
+          <p class="text-sm text-[#3f3f46] mt-2 max-w-xl">Vsaki prvi stranki ob prvem sodelovanju nudimo 10 % popusta na katerokoli storitev.</p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-6">
+
+          <article class="svc-card bg-[#12141C] border border-slate-800 rounded-3xl overflow-hidden reveal-item shadow-xl">
+            <div class="svc-photo" data-gallery="nadstresek" onclick="openServiceDetail('nadstresek')">
+              <img id="svc-img-nadstresek" src="/images/nadstresek-1.jpg" alt="Nadstreški in kovinske konstrukcije po meri" />
+              <button type="button" class="svc-nav svc-nav--prev" onclick="stepServiceGallery('nadstresek', -1, event)" aria-label="Prejšnja slika"><i data-lucide="chevron-left" class="w-4 h-4"></i></button>
+              <button type="button" class="svc-nav svc-nav--next" onclick="stepServiceGallery('nadstresek', 1, event)" aria-label="Naslednja slika"><i data-lucide="chevron-right" class="w-4 h-4"></i></button>
+              <div class="svc-dots" id="svc-dots-nadstresek"></div>
+            </div>
+            <div class="p-5 sm:p-6">
+              <span class="text-[10px] font-extrabold text-[#FF5E00] uppercase tracking-wider">Za dom &amp; poslovne objekte</span>
+              <h3 class="font-heading text-xl font-extrabold text-white mt-1">Nadstreški &amp; konstrukcije</h3>
+              <div class="svc-body">
+                <p class="text-sm text-slate-300 leading-relaxed">Izdelujemo manjše in večje nadstreške za avtomobile, terase, vhode in druge namene. Vsako konstrukcijo prilagodimo objektu, dimenzijam in željam naročnika.</p>
+                <p class="text-xs text-slate-400 font-semibold mt-3">Izdelava po meri • Kakovostni materiali • Montaža</p>
+                <a href="#kontakt" onclick="preselectService('nadstresek')" class="inline-flex mt-4 btn-orange-glow font-heading font-extrabold text-xs px-4 py-2.5 rounded-xl uppercase">Povprašajte za izvedbo</a>
               </div>
-              <p class="text-sm text-slate-300 leading-relaxed">
-                Trajni jekleni nadstreški z antikorozijskim vroči cinkanjem ter prašnim barvanjem v peči. 
-                Možnost kaljenega stekla, polikarbonatnih plošč ali sendvič panelov s skritimi vodnimi žlebovi.
-              </p>
-              <div class="pt-2 flex flex-wrap gap-4 items-center justify-between">
-                <span class="text-xs text-slate-400 font-semibold">100% prilagojene dimenzije &amp; nosilnost za sneg</span>
-                <button onclick="openModal('quote-modal', 'Kovinski Nadstreški')" class="btn-orange-glow font-heading font-extrabold text-xs px-5 py-2.5 rounded-xl uppercase">
-                  Zahtevaj Ponudbo
-                </button>
+              <p class="svc-hint">Podrži miško za opis · klikni sliko za povečavo</p>
+            </div>
+          </article>
+
+          <article class="svc-card bg-[#12141C] border border-slate-800 rounded-3xl overflow-hidden reveal-item shadow-xl">
+            <div class="svc-photo" data-gallery="ograja" onclick="openServiceDetail('ograja')">
+              <img id="svc-img-ograja" src="/images/ograja-1.jpg" alt="Kovinske ograje in vrata po meri" />
+              <button type="button" class="svc-nav svc-nav--prev" onclick="stepServiceGallery('ograja', -1, event)" aria-label="Prejšnja slika"><i data-lucide="chevron-left" class="w-4 h-4"></i></button>
+              <button type="button" class="svc-nav svc-nav--next" onclick="stepServiceGallery('ograja', 1, event)" aria-label="Naslednja slika"><i data-lucide="chevron-right" class="w-4 h-4"></i></button>
+              <div class="svc-dots" id="svc-dots-ograja"></div>
+            </div>
+            <div class="p-5 sm:p-6">
+              <span class="text-[10px] font-extrabold text-[#FF5E00] uppercase tracking-wider">Varnost &amp; dizajn</span>
+              <h3 class="font-heading text-xl font-extrabold text-white mt-1">Ograje &amp; vrata</h3>
+              <div class="svc-body">
+                <p class="text-sm text-slate-300 leading-relaxed">Izdelujemo in montiramo dvoriščne, balkonske in stopniščne ograje ter vrata po meri. Kovino lahko kombiniramo z lesom in drugimi materiali za popolnoma individualen izgled.</p>
+                <p class="text-xs text-slate-400 font-semibold mt-3">Po meri objekta • Različni materiali • Profesionalna montaža</p>
+                <a href="#kontakt" onclick="preselectService('ograja')" class="inline-flex mt-4 btn-orange-glow font-heading font-extrabold text-xs px-4 py-2.5 rounded-xl uppercase">Povprašajte za izvedbo</a>
+              </div>
+              <p class="svc-hint">Podrži miško za opis · klikni sliko za povečavo</p>
+            </div>
+          </article>
+
+          <article class="svc-card bg-[#12141C] border border-slate-800 rounded-3xl overflow-hidden reveal-item shadow-xl">
+            <div class="svc-photo" onclick="openServiceDetail('po-meri')">
+              <div class="text-center px-6">
+                <i data-lucide="image" class="w-8 h-8 text-[#FF5E00] mx-auto mb-2"></i>
+                <p class="text-xs font-bold uppercase tracking-widest text-slate-400">Fotografija kmalu</p>
               </div>
             </div>
-
-            <!-- Service 2 -->
-            <div class="bg-[#12141C] border border-slate-800 hover:border-[#FF5E00] rounded-3xl p-8 transition-all duration-300 reveal-item space-y-4 shadow-xl">
-              <div class="flex items-start justify-between">
-                <div class="space-y-2">
-                  <span class="text-xs font-extrabold text-[#FF5E00] uppercase tracking-wider">Premium Dizajn</span>
-                  <h3 class="font-heading text-2xl font-extrabold text-white">Moderne bioklimatske pergole</h3>
-                </div>
-                <div class="p-3 rounded-2xl bg-[#FF5E00]/10 text-[#FF5E00]">
-                  <i data-lucide="layers" class="w-6 h-6"></i>
-                </div>
+            <div class="p-5 sm:p-6">
+              <span class="text-[10px] font-extrabold text-[#FF5E00] uppercase tracking-wider">Vaša ideja. Naša izvedba.</span>
+              <h3 class="font-heading text-xl font-extrabold text-white mt-1">Izdelki po meri</h3>
+              <div class="svc-body">
+                <p class="text-sm text-slate-300 leading-relaxed">Od posameznih kovinskih elementov do popolnoma prilagojenih izdelkov in konstrukcij. Vašo idejo razvijemo, izdelamo in po potrebi tudi montiramo.</p>
+                <p class="text-xs text-slate-400 font-semibold mt-3">Od ideje do izvedbe • Kovina &amp; les • Možnost montaže</p>
+                <a href="#kontakt" onclick="preselectService('po-meri')" class="inline-flex mt-4 btn-orange-glow font-heading font-extrabold text-xs px-4 py-2.5 rounded-xl uppercase">Pošljite nam svojo idejo</a>
               </div>
-              <p class="text-sm text-slate-300 leading-relaxed">
-                Bioklimatske kovinske pergole z rotirajočimi lamelami, avtomatskim senčenjem ter ambientalno LED osvetlitvijo za brezskrbno bivanje na terasi skozi celo leto.
-              </p>
-              <div class="pt-2 flex flex-wrap gap-4 items-center justify-between">
-                <span class="text-xs text-slate-400 font-semibold">Motorizirane lamele + integrirane ZIP rolete</span>
-                <button onclick="openModal('quote-modal', 'Moderne Pergole')" class="btn-orange-glow font-heading font-extrabold text-xs px-5 py-2.5 rounded-xl uppercase">
-                  Zahtevaj Ponudbo
-                </button>
-              </div>
+              <p class="svc-hint">Podrži miško za opis · klikni za več</p>
             </div>
-
-            <!-- Service 3 -->
-            <div class="bg-[#12141C] border border-slate-800 hover:border-[#FF5E00] rounded-3xl p-8 transition-all duration-300 reveal-item space-y-4 shadow-xl">
-              <div class="flex items-start justify-between">
-                <div class="space-y-2">
-                  <span class="text-xs font-extrabold text-[#FF5E00] uppercase tracking-wider">Varnost &amp; Eleganca</span>
-                  <h3 class="font-heading text-2xl font-extrabold text-white">Kovinske &amp; inox ograje ter vrata</h3>
-                </div>
-                <div class="p-3 rounded-2xl bg-[#FF5E00]/10 text-[#FF5E00]">
-                  <i data-lucide="shield" class="w-6 h-6"></i>
-                </div>
-              </div>
-              <p class="text-sm text-slate-300 leading-relaxed">
-                Dvoriščne in balkonske ograje z lasersko izrezanimi paneli ter avtomatska drsna ali krilna dvoriščna vrata na daljinski elektromotorni pogon.
-              </p>
-              <div class="pt-2 flex flex-wrap gap-4 items-center justify-between">
-                <span class="text-xs text-slate-400 font-semibold">Laserski razrez panelov + 10 let garancije</span>
-                <button onclick="openModal('quote-modal', 'Kovinske Ograje')" class="btn-orange-glow font-heading font-extrabold text-xs px-5 py-2.5 rounded-xl uppercase">
-                  Zahtevaj Ponudbo
-                </button>
-              </div>
-            </div>
-
-          </div>
-
-          <!-- Sticky Pinned Image Column (4 Cols) -->
-          <div class="lg:col-span-4">
-            <div class="sticky-pinned-card space-y-6">
-              <div class="bg-[#12141C] border border-[#FF5E00]/30 rounded-3xl overflow-hidden p-6 space-y-4 shadow-2xl">
-                <div class="relative h-64 rounded-2xl overflow-hidden">
-                  <img src="/nadstesek.png" alt="Featured Carport" class="w-full h-full object-cover" />
-                  <span class="absolute top-3 right-3 bg-[#FF5E00] text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase">VAREX Izvedba</span>
-                </div>
-                <div class="space-y-2">
-                  <h4 class="font-heading font-extrabold text-lg text-white">Brezplačna izmera na terenu</h4>
-                  <p class="text-xs text-slate-400">Naš inženir prideta na vaš dom v Ljubljani z okolico ter pripravi natančne tehnične risbe.</p>
-                </div>
-                <button onclick="openModal('quote-modal')" class="w-full btn-orange-glow font-heading font-extrabold py-3 rounded-xl text-xs uppercase">
-                  Naročite Izmero
-                </button>
-              </div>
-            </div>
-          </div>
+          </article>
 
         </div>
 
@@ -609,85 +768,59 @@
          5. PORTFOLIO & REFERENCES (3 FEATURED PROJECTS)
          ========================================================= -->
     <section id="reference" class="py-28 bg-transparent">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
-        
-        <div class="text-center max-w-3xl mx-auto space-y-4 reveal-item">
-          <span class="px-4 py-1.5 rounded-full bg-[#FF5E00]/15 text-[#FF5E00] border border-[#FF5E00]/30 text-xs font-extrabold uppercase tracking-widest">Naše Reference</span>
-          <h2 class="font-heading text-3xl sm:text-5xl font-extrabold text-white">Izdelani projekti v Ljubljani in okolici</h2>
-          <p class="text-slate-400 text-base">Oglejte si 3 izpostavljene zadnje projekte kovinskih konstrukcij.</p>
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+
+        <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 reveal-item">
+          <div class="max-w-2xl space-y-4">
+            <span class="px-4 py-1.5 rounded-full bg-[#FF5E00]/15 text-[#FF5E00] border border-[#FF5E00]/30 text-xs font-extrabold uppercase tracking-widest">Naše reference</span>
+            <h2 class="font-heading text-3xl sm:text-5xl font-extrabold text-white">Izvedbe, ki govorijo same zase.</h2>
+            <p class="text-slate-400 text-base">Oglejte si izbrane nadstreške, ograje in izdelke po meri. Galerijo sproti dopolnjujemo z novimi VAREX projekti.</p>
+          </div>
+          <a href="#kontakt" class="btn-orange-glow font-heading font-extrabold text-xs tracking-wider uppercase px-6 py-3 rounded-xl inline-flex items-center gap-2 shrink-0">
+            Želim podobno izvedbo
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </a>
         </div>
 
-        <div class="grid md:grid-cols-3 gap-8">
-          
-          <!-- Project 1 -->
-          <div class="bg-[#12141C] border border-slate-800 rounded-3xl overflow-hidden hover:border-[#FF5E00]/50 transition-all duration-300 reveal-item shadow-xl flex flex-col justify-between">
-            <div>
-              <div class="relative h-64 overflow-hidden">
-                <img src="/nadstesek.png" alt="Projekt 1" class="w-full h-full object-cover hover:scale-110 transition-transform duration-700" />
-                <span class="absolute top-3 left-3 bg-[#FF5E00] text-white text-xs font-bold px-3 py-1 rounded-md">Ljubljana - Vič</span>
-              </div>
-              <div class="p-6 space-y-3">
-                <span class="text-xs text-[#FFAA00] font-bold">Junij 2026</span>
-                <h3 class="font-heading text-xl font-extrabold text-white">Dvojni nadstrešek s shrambo</h3>
-                <p class="text-xs text-slate-300 leading-relaxed">Pocinkana jeklena konstrukcija z integrirano zaprto kovinsko shrambo v antracit odtenku (RAL 7016).</p>
-              </div>
+        <div class="grid lg:grid-cols-12 gap-5">
+
+          <a href="#kontakt" onclick="preselectService('nadstresek')" class="ref-card lg:col-span-7 lg:row-span-2 min-h-[420px] lg:min-h-[560px] reveal-item block">
+            <img src="/nadstesek.png" alt="Nadstreški in kovinske konstrukcije VAREX" />
+            <div class="ref-card-overlay">
+              <span class="self-start mb-3 px-3 py-1 rounded-full bg-[#FF5E00] text-white text-[10px] font-extrabold uppercase tracking-widest">Nadstreški &amp; konstrukcije</span>
+              <h3 class="font-heading text-2xl sm:text-3xl font-extrabold text-white">Konstrukcije po meri objekta</h3>
+              <p class="text-sm text-slate-300 mt-2 max-w-md">Manjši in večji nadstreški za avtomobile, terase in vhode — prilagojeni dimenzijam in željam naročnika.</p>
+              <span class="mt-4 inline-flex items-center gap-2 text-xs font-extrabold uppercase tracking-wider text-[#FF5E00]">Povprašajte za izvedbo <i data-lucide="arrow-right" class="w-4 h-4"></i></span>
             </div>
-            <div class="p-6 pt-0">
-              <button onclick="openModal('quote-modal', 'Projekt Vič')" class="w-full bg-white/5 hover:bg-[#FF5E00]/20 text-white border border-white/10 py-3 rounded-xl text-xs font-bold">
-                Želim Podoben Projekt
-              </button>
+          </a>
+
+          <div class="ref-card lg:col-span-5 min-h-[270px] reveal-item group/slider">
+            <img id="fence-slider-img" src="/ograja.png" alt="Ograje in vrata VAREX" />
+            <div class="ref-card-overlay pointer-events-none">
+              <span class="self-start mb-3 px-3 py-1 rounded-full bg-[#FF5E00] text-white text-[10px] font-extrabold uppercase tracking-widest">Ograje &amp; vrata</span>
+              <h3 class="font-heading text-xl sm:text-2xl font-extrabold text-white">Varnost in dizajn po meri</h3>
+              <p class="text-sm text-slate-300 mt-1">Dvoriščne, balkonske in stopniščne ograje ter vrata. Kovina, les ali kombinacija.</p>
             </div>
+            <button type="button" onclick="prevFenceImage(event)" class="absolute left-3 top-1/2 -translate-y-1/2 p-2 rounded-full bg-black/60 text-white hover:bg-[#FF5E00] transition-colors z-10" aria-label="Prejšnja slika">
+              <i data-lucide="chevron-left" class="w-4 h-4"></i>
+            </button>
+            <button type="button" onclick="nextFenceImage(event)" class="absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-full bg-black/60 text-white hover:bg-[#FF5E00] transition-colors z-10" aria-label="Naslednja slika">
+              <i data-lucide="chevron-right" class="w-4 h-4"></i>
+            </button>
+            <a href="#kontakt" onclick="preselectService('ograja')" class="absolute bottom-5 right-5 z-10 btn-orange-glow font-heading font-extrabold text-[10px] uppercase tracking-wider px-4 py-2 rounded-lg">
+              Povprašajte
+            </a>
           </div>
 
-          <!-- Project 2 -->
-          <div class="bg-[#12141C] border border-slate-800 rounded-3xl overflow-hidden hover:border-[#FF5E00]/50 transition-all duration-300 reveal-item shadow-xl flex flex-col justify-between">
-            <div>
-              <div class="relative h-64 overflow-hidden">
-                <img src="/pergola_bioclimatic.jpg" alt="Projekt 2" class="w-full h-full object-cover hover:scale-110 transition-transform duration-700" />
-                <span class="absolute top-3 left-3 bg-[#FF5E00] text-white text-xs font-bold px-3 py-1 rounded-md">Brezovica pri Ljubljani</span>
-              </div>
-              <div class="p-6 space-y-3">
-                <span class="text-xs text-[#FFAA00] font-bold">Maj 2026</span>
-                <h3 class="font-heading text-xl font-extrabold text-white">Bioklimatska pergola z LED</h3>
-                <p class="text-xs text-slate-300 leading-relaxed">Luksuzna terasna pergola z avtomatskim obračanjem lamel, ZIP roletami ter dimabilno LED osvetlitvijo.</p>
-              </div>
+          <a href="#kontakt" onclick="preselectService('po-meri')" class="ref-card lg:col-span-5 min-h-[270px] reveal-item block">
+            <img src="/pergola_bioclimatic.jpg" alt="Unikatni izdelki po meri VAREX" />
+            <div class="ref-card-overlay">
+              <span class="self-start mb-3 px-3 py-1 rounded-full bg-[#FF5E00] text-white text-[10px] font-extrabold uppercase tracking-widest">Izdelki po meri</span>
+              <h3 class="font-heading text-xl sm:text-2xl font-extrabold text-white">Vaša ideja. Naša izvedba.</h3>
+              <p class="text-sm text-slate-300 mt-1">Unikatni elementi iz kovine in lesa — od zasnove do montaže.</p>
+              <span class="mt-3 inline-flex items-center gap-2 text-xs font-extrabold uppercase tracking-wider text-[#FF5E00]">Pošljite nam svojo idejo <i data-lucide="arrow-right" class="w-4 h-4"></i></span>
             </div>
-            <div class="p-6 pt-0">
-              <button onclick="openModal('quote-modal', 'Projekt Brezovica')" class="w-full bg-white/5 hover:bg-[#FF5E00]/20 text-white border border-white/10 py-3 rounded-xl text-xs font-bold">
-                Želim Podoben Projekt
-              </button>
-            </div>
-          </div>
-
-          <!-- Project 3 -->
-          <div class="bg-[#12141C] border border-slate-800 rounded-3xl overflow-hidden hover:border-[#FF5E00]/50 transition-all duration-300 reveal-item shadow-xl flex flex-col justify-between">
-            <div>
-              <div class="relative h-64 overflow-hidden group/slider">
-                <img id="fence-slider-img" src="/ograja.png" alt="Projekt 3" class="w-full h-full object-cover transition-transform duration-700" />
-                <span class="absolute top-3 left-3 bg-[#FF5E00] text-white text-xs font-bold px-3 py-1 rounded-md">Domžale</span>
-                
-                <!-- Left Button -->
-                <button onclick="prevFenceImage(event)" class="absolute left-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-black/60 text-white hover:bg-[#FF5E00] transition-colors z-10">
-                  <i data-lucide="chevron-left" class="w-4 h-4"></i>
-                </button>
-                
-                <!-- Right Button -->
-                <button onclick="nextFenceImage(event)" class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-black/60 text-white hover:bg-[#FF5E00] transition-colors z-10">
-                  <i data-lucide="chevron-right" class="w-4 h-4"></i>
-                </button>
-              </div>
-              <div class="p-6 space-y-3">
-                <span class="text-xs text-[#FFAA00] font-bold">April 2026</span>
-                <h3 class="font-heading text-xl font-extrabold text-white">Moderna ograja z drsnimi vrati</h3>
-                <p class="text-xs text-slate-300 leading-relaxed">Lasersko izrezani kovinski paneli z avtomatiziranimi drsnimi dvoriščnimi vrati na daljinski pogon.</p>
-              </div>
-            </div>
-            <div class="p-6 pt-0">
-              <button onclick="openModal('quote-modal', 'Projekt Domžale')" class="w-full bg-white/5 hover:bg-[#FF5E00]/20 text-white border border-white/10 py-3 rounded-xl text-xs font-bold">
-                Želim Podoben Projekt
-              </button>
-            </div>
-          </div>
+          </a>
 
         </div>
 
@@ -703,19 +836,26 @@
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
         <div class="text-center max-w-3xl mx-auto space-y-4 reveal-item">
           <span class="px-4 py-1.5 rounded-full bg-[#FF5E00]/15 text-[#FF5E00] border border-[#FF5E00]/30 text-xs font-extrabold uppercase">Lokacija &amp; Območje</span>
-          <h2 class="font-heading text-3xl sm:text-4xl font-extrabold text-white">Ljubljana z okolico (30km+ radij)</h2>
-          <p class="text-slate-400 text-sm">Izmero in montažo izvajamo v mestih: Ljubljana, Domžale, Kamnik, Kranj, Vrhnika, Grosuplje, Medvode.</p>
+          <h2 class="font-heading text-3xl sm:text-4xl font-extrabold text-white">Kamniška ulica 25, 1000 Ljubljana</h2>
+          <p class="text-slate-400 text-sm">Območje delovanja: Ljubljana in širša okolica.</p>
         </div>
 
         <div class="grid lg:grid-cols-12 gap-8 items-center">
-          <div class="lg:col-span-8 h-[400px] rounded-3xl overflow-hidden border border-[#FF5E00]/30 shadow-2xl reveal-item">
-            <div id="map" class="w-full h-full"></div>
+        <div class="lg:col-span-8 h-[400px] rounded-3xl overflow-hidden border border-[#FF5E00]/30 shadow-2xl reveal-item">
+            <iframe
+              title="VAREX na Google Maps"
+              src="https://www.google.com/maps?q=Kamniška+ulica+25,+1000+Ljubljana&hl=sl&z=17&output=embed"
+              class="w-full h-full border-0"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              allowfullscreen>
+            </iframe>
           </div>
           <div class="lg:col-span-4 bg-[#12141C] border border-slate-800 rounded-3xl p-8 space-y-6 reveal-item">
             <h3 class="font-heading text-xl font-extrabold text-white">Direktni kontakti</h3>
             <div class="space-y-4 text-xs text-slate-300">
-              <div><strong class="text-white block font-heading text-sm">Sedež Delavnice:</strong> Ljubljana, Slovenija</div>
-              <div><strong class="text-white block font-heading text-sm">Telefon:</strong> <a href="tel:+38640123456" class="text-[#FF5E00] font-bold text-base">040 123 456</a></div>
+              <div><strong class="text-white block font-heading text-sm">Naslov:</strong> <a href="https://maps.app.goo.gl/eL7iT138JrnMVwi36" target="_blank" rel="noopener noreferrer" class="text-white hover:text-[#FF5E00]">Kamniška ulica 25, 1000 Ljubljana</a></div>
+              <div><strong class="text-white block font-heading text-sm">Telefon:</strong> <a href="tel:+38630370180" class="text-[#FF5E00] font-bold text-base">030 370 180</a></div>
               <div><strong class="text-white block font-heading text-sm">E-pošta:</strong> <a href="mailto:info@varex.si" class="text-white">info@varex.si</a></div>
             </div>
           </div>
@@ -732,47 +872,108 @@
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
         <div class="text-center max-w-3xl mx-auto space-y-4 reveal-item">
           <span class="px-4 py-1.5 rounded-full bg-[#FF5E00]/15 text-[#FF5E00] border border-[#FF5E00]/30 text-xs font-extrabold uppercase">Hitro Povpraševanje</span>
-          <h2 class="font-heading text-3xl sm:text-5xl font-extrabold text-white">Kontaktirajte nas za brezplačno ponudbo</h2>
+          <h2 class="font-heading text-3xl sm:text-5xl font-extrabold text-white">Pridobite ponudbo</h2>
+          <p class="text-slate-400 text-base">Pošljite nam nekaj osnovnih informacij o projektu in kontaktirali vas bomo glede možnosti izvedbe.</p>
         </div>
 
         <div class="max-w-3xl mx-auto bg-[#12141C] border border-[#FF5E00]/30 rounded-3xl p-8 shadow-2xl reveal-item">
           <form onsubmit="handleFormSubmit(event)" class="space-y-6">
             <div class="grid sm:grid-cols-2 gap-6">
               <div>
-                <label class="block text-xs font-extrabold text-slate-300 uppercase mb-2">Ime in Priimek *</label>
-                <input type="text" required placeholder="Janez Novak" class="w-full bg-[#181B26] border border-slate-800 rounded-xl px-4 py-3 text-white text-sm focus:border-[#FF5E00] outline-none" />
+                <label class="block text-xs font-extrabold text-slate-300 uppercase mb-2">Ime in priimek *</label>
+                <input type="text" required placeholder="Ime in priimek" class="w-full bg-[#181B26] border border-slate-800 rounded-xl px-4 py-3 text-white text-sm focus:border-[#FF5E00] outline-none" />
               </div>
               <div>
                 <label class="block text-xs font-extrabold text-slate-300 uppercase mb-2">Telefon *</label>
-                <input type="tel" required placeholder="040 123 456" class="w-full bg-[#181B26] border border-slate-800 rounded-xl px-4 py-3 text-white text-sm focus:border-[#FF5E00] outline-none" />
+                <input type="tel" required placeholder="030 370 180" class="w-full bg-[#181B26] border border-slate-800 rounded-xl px-4 py-3 text-white text-sm focus:border-[#FF5E00] outline-none" />
               </div>
             </div>
 
             <div class="grid sm:grid-cols-2 gap-6">
               <div>
                 <label class="block text-xs font-extrabold text-slate-300 uppercase mb-2">E-pošta *</label>
-                <input type="email" required placeholder="janez@novak.si" class="w-full bg-[#181B26] border border-slate-800 rounded-xl px-4 py-3 text-white text-sm focus:border-[#FF5E00] outline-none" />
+                <input type="email" required placeholder="vas@email.si" class="w-full bg-[#181B26] border border-slate-800 rounded-xl px-4 py-3 text-white text-sm focus:border-[#FF5E00] outline-none" />
               </div>
               <div>
-                <label class="block text-xs font-extrabold text-slate-300 uppercase mb-2">Storitev</label>
+                <label class="block text-xs font-extrabold text-slate-300 uppercase mb-2">Lokacija projekta</label>
+                <input type="text" required placeholder="npr. Ljubljana, Kamnik, Domžale ..." class="w-full bg-[#181B26] border border-slate-800 rounded-xl px-4 py-3 text-white text-sm focus:border-[#FF5E00] outline-none" />
+              </div>
+            </div>
+
+            <div class="grid sm:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-xs font-extrabold text-slate-300 uppercase mb-2">Kaj potrebujete?</label>
                 <select id="form-service" class="w-full bg-[#181B26] border border-slate-800 rounded-xl px-4 py-3 text-white text-sm focus:border-[#FF5E00] outline-none">
-                  <option value="Nadstreški">Kovinski Nadstrešek po meri</option>
-                  <option value="Pergola">Bioklimatska Kovinska Pergola</option>
-                  <option value="Ograje">Kovinska ali Inox Ograja</option>
-                  <option value="Varjenje">Varjenje po meri / Konstrukcija</option>
+                  <option value="nadstresek">Nadstrešek / kovinska konstrukcija</option>
+                  <option value="ograja">Ograja</option>
+                  <option value="vrata">Vrata</option>
+                  <option value="po-meri">Izdelek po meri</option>
+                  <option value="drugo">Drugo</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-extrabold text-slate-300 uppercase mb-2">Okviren budget</label>
+                <select class="w-full bg-[#181B26] border border-slate-800 rounded-xl px-4 py-3 text-white text-sm focus:border-[#FF5E00] outline-none">
+                  <option>Do 2.000 €</option>
+                  <option>2.000–5.000 €</option>
+                  <option>5.000–10.000 €</option>
+                  <option>10.000 €+</option>
+                  <option>Želim najprej ponudbo</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="grid sm:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-xs font-extrabold text-slate-300 uppercase mb-2">Okvirne dimenzije</label>
+                <input type="text" placeholder="npr. 6 × 4 m" class="w-full bg-[#181B26] border border-slate-800 rounded-xl px-4 py-3 text-white text-sm focus:border-[#FF5E00] outline-none" />
+              </div>
+              <div>
+                <label class="block text-xs font-extrabold text-slate-300 uppercase mb-2">Želeni termin izvedbe</label>
+                <select class="w-full bg-[#181B26] border border-slate-800 rounded-xl px-4 py-3 text-white text-sm focus:border-[#FF5E00] outline-none">
+                  <option>Čim prej</option>
+                  <option>V naslednjem mesecu</option>
+                  <option>V 1–3 mesecih</option>
+                  <option>V 3–6 mesecih</option>
+                  <option>Samo informativno povpraševanje</option>
                 </select>
               </div>
             </div>
 
             <div>
-              <label class="block text-xs font-extrabold text-slate-300 uppercase mb-2">Opis projekta in dimenzije</label>
-              <textarea rows="4" placeholder="Opis vaše terase ali dvorišča..." class="w-full bg-[#181B26] border border-slate-800 rounded-xl px-4 py-3 text-white text-sm focus:border-[#FF5E00] outline-none"></textarea>
+              <label class="block text-xs font-extrabold text-slate-300 uppercase mb-2">Opišite svoj projekt</label>
+              <textarea rows="4" placeholder="Opišite, kaj potrebujete ..." class="w-full bg-[#181B26] border border-slate-800 rounded-xl px-4 py-3 text-white text-sm focus:border-[#FF5E00] outline-none"></textarea>
+            </div>
+
+            <div>
+              <label class="block text-xs font-extrabold text-slate-300 uppercase mb-2">Dodaj slike / načrt / skico</label>
+              <input type="file" accept="image/*,.pdf,application/pdf" multiple class="w-full text-xs text-slate-400 file:bg-[#FF5E00]/20 file:text-[#FF5E00] file:border-0 file:rounded-lg file:px-3 file:py-2 file:mr-3" />
             </div>
 
             <button type="submit" class="w-full btn-orange-glow font-heading font-extrabold py-4 rounded-xl text-base uppercase tracking-wider shadow-xl">
-              Pošljite Povpraševanje
+              Pošlji povpraševanje
             </button>
+            <p class="text-center text-xs text-slate-500">Brez obveznosti. Vaše podatke uporabimo izključno za pripravo odgovora na povpraševanje.</p>
+            <a href="tel:+38630370180" class="flex items-center justify-center gap-2 text-sm font-bold text-white hover:text-[#FF5E00] transition-colors">
+              <i data-lucide="phone" class="w-4 h-4 text-[#FF5E00]"></i>
+              Pokličite 030 370 180
+            </a>
           </form>
+        </div>
+
+        <div class="max-w-3xl mx-auto grid sm:grid-cols-3 gap-4">
+          <div class="bg-[#12141C] border border-slate-800 rounded-2xl p-5 text-center space-y-2">
+            <i data-lucide="pen-tool" class="w-7 h-7 text-[#FF5E00] mx-auto"></i>
+            <p class="font-heading font-extrabold text-sm text-white">Izdelava po meri</p>
+          </div>
+          <div class="bg-[#12141C] border border-slate-800 rounded-2xl p-5 text-center space-y-2">
+            <i data-lucide="hammer" class="w-7 h-7 text-[#FF5E00] mx-auto"></i>
+            <p class="font-heading font-extrabold text-sm text-white">Profesionalna montaža</p>
+          </div>
+          <div class="bg-[#12141C] border border-slate-800 rounded-2xl p-5 text-center space-y-2">
+            <i data-lucide="award" class="w-7 h-7 text-[#FF5E00] mx-auto"></i>
+            <p class="font-heading font-extrabold text-sm text-white">Najkakovostnejši materiali</p>
+          </div>
         </div>
       </div>
     </section>
@@ -788,9 +989,7 @@
           
           <!-- Logo Badge + Crisp WHITE VAREX Text -->
           <div class="flex items-center gap-4">
-            <div class="logo-badge flex items-center justify-center">
-              <img src="/logo_temna.png?v=2" alt="VAREX Logo" class="h-10 w-auto object-contain" />
-            </div>
+            <img src="/logo_temna.png?v=2" alt="VAREX" class="h-12 w-auto object-contain" />
             <span class="font-heading font-black text-3xl tracking-wider text-white">VAREX</span>
           </div>
 
@@ -798,13 +997,13 @@
           <div class="flex flex-wrap items-center justify-center lg:justify-end gap-8 sm:gap-12">
             
             <!-- Phone -->
-            <a href="tel:+38640123456" class="flex items-center gap-3.5 group">
+            <a href="tel:+38630370180" class="flex items-center gap-3.5 group">
               <div class="w-12 h-12 rounded-full border border-slate-700 bg-[#0B0C10] flex items-center justify-center text-slate-200 group-hover:border-[#FF5E00] group-hover:text-[#FF5E00] transition-colors">
                 <i data-lucide="phone" class="w-5 h-5"></i>
               </div>
               <div>
                 <div class="text-xs text-slate-400 font-medium">Telefon</div>
-                <div class="text-sm font-bold text-white group-hover:text-[#FF5E00] transition-colors">040 123 456</div>
+                <div class="text-sm font-bold text-white group-hover:text-[#FF5E00] transition-colors">030 370 180</div>
               </div>
             </a>
 
@@ -820,15 +1019,15 @@
             </a>
 
             <!-- Location -->
-            <div class="flex items-center gap-3.5">
-              <div class="w-12 h-12 rounded-full border border-slate-700 bg-[#0B0C10] flex items-center justify-center text-[#FF5E00]">
+            <a href="https://maps.app.goo.gl/eL7iT138JrnMVwi36" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3.5 group">
+              <div class="w-12 h-12 rounded-full border border-slate-700 bg-[#0B0C10] flex items-center justify-center text-[#FF5E00] group-hover:border-[#FF5E00] transition-colors">
                 <i data-lucide="map-pin" class="w-5 h-5"></i>
               </div>
               <div>
                 <div class="text-xs text-slate-400 font-medium">Lokacija</div>
-                <div class="text-sm font-bold text-white">Ljubljana z okolico (30km+)</div>
+                <div class="text-sm font-bold text-white group-hover:text-[#FF5E00] transition-colors">Kamniška ulica 25, 1000 Ljubljana</div>
               </div>
-            </div>
+            </a>
 
           </div>
 
@@ -841,7 +1040,7 @@
           <div class="space-y-4">
             <h3 class="font-heading font-extrabold text-xl text-white">VAREX</h3>
             <p class="text-xs text-slate-400 leading-relaxed max-w-sm">
-              VAREX je podjetje iz Ljubljane, specializirano za celovito izdelavo kovinskih nadstreškov, pergol, ograj ter zahtevnih varilnih del po meri. Odlikujejo nas vrhunski dizajni, napredne tehnologije in zanesljivost.
+              Kovinarski izdelki in konstrukcije po meri. Od ideje do izdelave in profesionalne montaže.
             </p>
             <div class="flex items-center gap-4 pt-2 text-slate-400">
               <a href="#" class="p-2 rounded-full hover:text-[#FF5E00] transition-colors"><i data-lucide="instagram" class="w-4 h-4"></i></a>
@@ -877,8 +1076,7 @@
 
         <!-- Bottom Copyright Row -->
         <div class="pt-6 text-center text-xs text-slate-400 space-y-2">
-          <div class="text-slate-400">Sodelujemo z <span class="text-[#FF5E00] font-bold">INPRO GROUP d.o.o.</span></div>
-          <div>&copy; 2026 All Rights Reserved. | Spletno stran je izdelal <span class="text-white font-bold tracking-wider">VAREX</span></div>
+          <div>&copy; 2026 All Rights Reserved. | Spletno stran je izdelal <span class="text-[#FF5E00] font-semibold">SCALE-UP</span></div>
         </div>
 
       </div>
@@ -886,15 +1084,36 @@
 
     <!-- Mobile Sticky Call Bar -->
     <div class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#07080A]/95 border-t border-[#FF5E00]/40 p-2.5 flex gap-2">
-      <a href="tel:+38640123456" class="flex-1 bg-emerald-600 text-white font-bold text-xs py-3 rounded-xl flex justify-center items-center gap-2 shadow-lg">
+      <a href="tel:+38630370180" class="flex-1 bg-emerald-600 text-white font-bold text-xs py-3 rounded-xl flex justify-center items-center gap-2 shadow-lg">
         <i data-lucide="phone" class="w-4 h-4"></i> Pokličite zdaj
       </a>
-      <button onclick="openModal('quote-modal')" class="flex-1 btn-orange-glow font-heading font-extrabold text-xs py-3 rounded-xl flex justify-center items-center gap-2">
+      <a href="#kontakt" class="flex-1 btn-orange-glow font-heading font-extrabold text-xs py-3 rounded-xl flex justify-center items-center gap-2">
         <i data-lucide="send" class="w-4 h-4"></i> Povpraševanje
-      </button>
+      </a>
     </div>
 
-    <!-- Modal Container -->
+    <!-- Service zoom / detail -->
+    <div id="service-zoom" class="hidden fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-end sm:items-center justify-center p-0 sm:p-4 pb-20 sm:pb-4" onclick="if(event.target===this)closeModal('service-zoom')">
+      <div class="svc-zoom-panel max-w-3xl w-full bg-[#12141C] border border-[#FF5E00]/40 rounded-t-3xl sm:rounded-3xl overflow-hidden relative shadow-2xl max-h-[88vh] overflow-y-auto">
+        <button onclick="closeModal('service-zoom')" class="absolute top-3 right-3 z-10 p-3 rounded-full bg-black/60 text-white hover:bg-[#FF5E00] transition-colors" aria-label="Zapri">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+        <div class="svc-zoom-img-wrap">
+          <div id="svc-zoom-photo" class="flex items-center justify-center w-full h-full min-h-[240px]"></div>
+          <button type="button" class="svc-nav svc-nav--prev" onclick="stepZoomGallery(-1, event)" aria-label="Prejšnja slika"><i data-lucide="chevron-left" class="w-4 h-4"></i></button>
+          <button type="button" class="svc-nav svc-nav--next" onclick="stepZoomGallery(1, event)" aria-label="Naslednja slika"><i data-lucide="chevron-right" class="w-4 h-4"></i></button>
+        </div>
+        <div class="p-6 sm:p-8 space-y-4">
+          <span id="svc-zoom-kicker" class="text-xs font-extrabold text-[#FF5E00] uppercase tracking-wider"></span>
+          <h3 id="svc-zoom-title" class="font-heading text-2xl sm:text-3xl font-extrabold text-white"></h3>
+          <p id="svc-zoom-text" class="text-sm sm:text-base text-slate-300 leading-relaxed"></p>
+          <p id="svc-zoom-line" class="text-xs text-slate-400 font-semibold"></p>
+          <a id="svc-zoom-cta" href="#kontakt" onclick="closeModal('service-zoom')" class="inline-flex btn-orange-glow font-heading font-extrabold text-xs px-6 py-3 rounded-xl uppercase tracking-wider">
+            Povprašajte za izvedbo
+          </a>
+        </div>
+      </div>
+    </div>
     <div id="quote-modal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
       <div class="max-w-xl w-full bg-[#12141C] border border-[#FF5E00]/40 rounded-3xl p-6 relative">
         <button onclick="closeModal('quote-modal')" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i data-lucide="x" class="w-6 h-6"></i></button>
@@ -928,7 +1147,6 @@
 
   </div> <!-- End Page Wrapper -->
 
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
   <script>
     lucide.createIcons();
 
@@ -950,30 +1168,28 @@
       if (img) img.src = fenceImages[currentFenceIdx];
     }
 
-    /* Preloader Animation Controller */
+    /* Preloader Animation Controller — Scale Up join + slide up */
     window.addEventListener('DOMContentLoaded', () => {
       const preloader = document.getElementById('preloader');
-      const bar = document.getElementById('preloader-bar');
-      const flare = document.getElementById('spark-flare');
-
-      let progress = 0;
-      const interval = setInterval(() => {
-        progress += 25;
-        if (bar) bar.style.width = progress + '%';
-
-        if (progress >= 100) {
-          clearInterval(interval);
-          setTimeout(() => {
-            if (flare) flare.classList.add('flare-active');
-            setTimeout(() => {
-              if (preloader) {
-                preloader.style.opacity = '0';
-                setTimeout(() => preloader.style.display = 'none', 800);
-              }
-            }, 300);
-          }, 400);
-        }
-      }, 250);
+      const header = document.getElementById('site-header');
+      if (header) {
+        const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 24);
+        onScroll();
+        window.addEventListener('scroll', onScroll, { passive: true });
+      }
+      renderServiceDots('nadstresek');
+      renderServiceDots('ograja');
+      bindGallerySwipe('nadstresek');
+      bindGallerySwipe('ograja');
+      bindZoomSwipe();
+      if (!preloader) return;
+      preloader.classList.add('hold');
+      if (window.lucide) lucide.createIcons();
+      const holdMs = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 1400;
+      setTimeout(() => {
+        preloader.classList.add('exit');
+        setTimeout(() => { preloader.style.display = 'none'; }, 500);
+      }, holdMs);
     });
 
     /* Scroll Reveal System */
@@ -1016,7 +1232,164 @@
       document.getElementById('mobile-drawer').classList.toggle('hidden');
     }
 
+    function preselectService(serviceName) {
+      const sel = document.getElementById('form-service');
+      if (sel && serviceName) sel.value = serviceName;
+    }
+
+    const serviceDetails = {
+      nadstresek: {
+        images: [
+          '/images/nadstresek-1.jpg',
+          '/images/nadstresek-2.jpg',
+          '/images/nadstresek-3.jpg',
+          '/images/nadstresek-4.jpg'
+        ],
+        alt: 'Nadstreški in kovinske konstrukcije po meri',
+        kicker: 'Za dom & poslovne objekte',
+        title: 'Nadstreški & konstrukcije',
+        text: 'Izdelujemo manjše in večje nadstreške za avtomobile, terase, vhode in druge namene. Vsako konstrukcijo prilagodimo objektu, dimenzijam in željam naročnika.',
+        line: 'Izdelava po meri • Kakovostni materiali • Montaža',
+        cta: 'Povprašajte za izvedbo'
+      },
+      ograja: {
+        images: [
+          '/images/ograja-1.jpg',
+          '/images/ograja-2.jpg',
+          '/images/ograja-3.jpg'
+        ],
+        alt: 'Kovinske ograje in vrata po meri',
+        kicker: 'Varnost & dizajn',
+        title: 'Ograje & vrata',
+        text: 'Izdelujemo in montiramo dvoriščne, balkonske in stopniščne ograje ter vrata po meri. Kovino lahko kombiniramo z lesom in drugimi materiali za popolnoma individualen izgled.',
+        line: 'Po meri objekta • Različni materiali • Profesionalna montaža',
+        cta: 'Povprašajte za izvedbo'
+      },
+      'po-meri': {
+        images: [],
+        alt: '',
+        kicker: 'Vaša ideja. Naša izvedba.',
+        title: 'Izdelki po meri',
+        text: 'Od posameznih kovinskih elementov do popolnoma prilagojenih izdelkov in konstrukcij. Vašo idejo razvijemo, izdelamo in po potrebi tudi montiramo.',
+        line: 'Od ideje do izvedbe • Kovina & les • Možnost montaže',
+        cta: 'Pošljite nam svojo idejo'
+      }
+    };
+
+    const svcGalleryIdx = { nadstresek: 0, ograja: 0, 'po-meri': 0 };
+    let zoomServiceKey = null;
+    let gallerySwiped = false;
+
+    function renderServiceDots(key) {
+      const s = serviceDetails[key];
+      const wrap = document.getElementById('svc-dots-' + key);
+      if (!wrap || !s || !s.images.length) return;
+      wrap.innerHTML = s.images.map((_, i) => '<span class="' + (i === svcGalleryIdx[key] ? 'is-on' : '') + '"></span>').join('');
+    }
+
+    function showServiceImage(key) {
+      const s = serviceDetails[key];
+      if (!s || !s.images.length) return;
+      const img = document.getElementById('svc-img-' + key);
+      if (img) img.src = s.images[svcGalleryIdx[key]];
+      renderServiceDots(key);
+    }
+
+    function stepServiceGallery(key, dir, event) {
+      if (event) event.stopPropagation();
+      const s = serviceDetails[key];
+      if (!s || !s.images.length) return;
+      svcGalleryIdx[key] = (svcGalleryIdx[key] + dir + s.images.length) % s.images.length;
+      showServiceImage(key);
+    }
+
+    function bindGallerySwipe(key) {
+      const el = document.querySelector('[data-gallery="' + key + '"]');
+      if (!el) return;
+      let startX = null;
+      let moved = false;
+      el.addEventListener('touchstart', (e) => {
+        startX = e.changedTouches[0].clientX;
+        moved = false;
+      }, { passive: true });
+      el.addEventListener('touchmove', (e) => {
+        if (startX == null) return;
+        if (Math.abs(e.changedTouches[0].clientX - startX) > 12) moved = true;
+      }, { passive: true });
+      el.addEventListener('touchend', (e) => {
+        if (startX == null) return;
+        const dx = e.changedTouches[0].clientX - startX;
+        if (Math.abs(dx) > 40) {
+          gallerySwiped = true;
+          stepServiceGallery(key, dx < 0 ? 1 : -1, e);
+        }
+        startX = null;
+        if (moved) e.preventDefault();
+      });
+    }
+
+    function bindZoomSwipe() {
+      const el = document.querySelector('.svc-zoom-img-wrap');
+      if (!el) return;
+      let startX = null;
+      el.addEventListener('touchstart', (e) => { startX = e.changedTouches[0].clientX; }, { passive: true });
+      el.addEventListener('touchend', (e) => {
+        if (startX == null) return;
+        const dx = e.changedTouches[0].clientX - startX;
+        if (Math.abs(dx) > 40) stepZoomGallery(dx < 0 ? 1 : -1, e);
+        startX = null;
+      });
+    }
+
+    function renderZoomImage() {
+      const s = serviceDetails[zoomServiceKey];
+      const photo = document.getElementById('svc-zoom-photo');
+      if (!s || !photo) return;
+      if (s.images.length) {
+        photo.innerHTML = '<img src="' + s.images[svcGalleryIdx[zoomServiceKey]] + '" alt="' + s.alt + '" />';
+      } else {
+        photo.innerHTML = '<div class="py-16 text-center"><p class="text-xs font-bold uppercase tracking-widest text-slate-400">Fotografija kmalu</p></div>';
+      }
+    }
+
+    function stepZoomGallery(dir, event) {
+      if (event) event.stopPropagation();
+      if (!zoomServiceKey) return;
+      stepServiceGallery(zoomServiceKey, dir);
+      renderZoomImage();
+    }
+
+    function openServiceDetail(key) {
+      if (gallerySwiped) {
+        gallerySwiped = false;
+        return;
+      }
+      const s = serviceDetails[key];
+      if (!s) return;
+      zoomServiceKey = key;
+      renderZoomImage();
+      document.getElementById('svc-zoom-kicker').textContent = s.kicker;
+      document.getElementById('svc-zoom-title').textContent = s.title;
+      document.getElementById('svc-zoom-text').textContent = s.text;
+      document.getElementById('svc-zoom-line').textContent = s.line;
+      const cta = document.getElementById('svc-zoom-cta');
+      cta.textContent = s.cta;
+      cta.onclick = function() {
+        closeModal('service-zoom');
+        preselectService(key);
+      };
+      document.getElementById('service-zoom').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+      if (window.lucide) lucide.createIcons();
+    }
+
     function openModal(id, serviceName) {
+      if (id === 'quote-modal') {
+        preselectService(serviceName);
+        const form = document.getElementById('kontakt');
+        if (form) form.scrollIntoView({ behavior: 'smooth' });
+        return;
+      }
       const modal = document.getElementById(id);
       if (modal) {
         modal.classList.remove('hidden');
@@ -1034,6 +1407,7 @@
       const modal = document.getElementById(id);
       if (modal) {
         modal.classList.add('hidden');
+        document.body.style.overflow = '';
         if (id === 'video-modal') {
           const video = document.getElementById('varex-video-player');
           if (video) {
@@ -1043,6 +1417,13 @@
         }
       }
     }
+    document.addEventListener('keydown', (e) => {
+      const zoom = document.getElementById('service-zoom');
+      if (!zoom || zoom.classList.contains('hidden')) return;
+      if (e.key === 'Escape') closeModal('service-zoom');
+      if (e.key === 'ArrowLeft') stepZoomGallery(-1);
+      if (e.key === 'ArrowRight') stepZoomGallery(1);
+    });
 
     function handleFormSubmit(e) {
       e.preventDefault();
@@ -1051,16 +1432,7 @@
       closeModal('quote-modal');
     }
 
-    /* Leaflet map setup */
-    window.addEventListener('DOMContentLoaded', () => {
-      if (window.L && document.getElementById('map')) {
-        const coords = [46.0569, 14.5058];
-        const map = L.map('map', { center: coords, zoom: 10, scrollWheelZoom: false });
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-        L.circle(coords, { color: '#FF5E00', fillColor: '#FF5E00', fillOpacity: 0.15, radius: 30000 }).addTo(map);
-        L.marker(coords).addTo(map).bindPopup('<b>VAREX Ljubljana</b><br/>30km+ Pokritost').openPopup();
-      }
-    });
+    /* Google Maps iframe is used instead of Leaflet */
 
     /* ---------------------------------------------------------------
        REACTIVE AMBIENT BACKGROUND — Mouse glow + welding spark embers
